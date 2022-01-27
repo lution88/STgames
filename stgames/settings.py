@@ -37,13 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<< HEAD
-    'steam',
-    'user',
-=======
-    'user',
     'games',
->>>>>>> c96397438d61241119e61f84486e6c868410a41c
+    'user',
 ]
 
 MIDDLEWARE = [
