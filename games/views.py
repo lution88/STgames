@@ -10,11 +10,14 @@ def test(request):
         s = csv.DictReader(file)
         s = pd.DataFrame(s)
 
-    print()
+    print("testing")
 
     ls = []
     for i in list(s['GameName']):
         ls.append(Games(game=f'{i}'))
-    print(ls)
-    Games.objects.bulk_create(ls)
-    return render(request, 'test.html', )
+    # print(ls)
+    # Games.objects.bulk_create(ls)
+    t = Games.objects.filter(game_num=11)
+    print(t[0].game)
+    print(t)
+    return render(request, 'test.html',{'game':t})

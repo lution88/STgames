@@ -11,4 +11,4 @@ class Games(models.Model):
     game_num = models.BigAutoField(primary_key=True)
     game = models.CharField(max_length=256)
     playtime = models.CharField(max_length=256)
-    user_id = models.ForeignKey( UserModel , on_delete=models.CASCADE ,db_column='user_code')
+    user_id = models.ForeignKey( UserModel , on_delete=models.CASCADE ,db_column='user_code', null=True)
