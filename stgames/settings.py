@@ -73,6 +73,7 @@ WSGI_APPLICATION = 'stgames.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -80,15 +81,16 @@ WSGI_APPLICATION = 'stgames.wsgi.application'
 #     }
 # }
 
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'redeyes1234',
-        'USER': 'redeyes1234',
-        'PASSWORD': 'python!1004',
-        'PORT': '3306',
-        'HOST': 'umj7-015.cafe24.com',
-    }
+    'default':
+        {'ENGINE': 'django.db.backends.mysql',
+         'NAME': 'redeyes1234',
+         'USER': 'redeyes1234',
+         'PASSWORD': 'python!1004',
+         'PORT': '3306',
+         'HOST': 'umj7-015.cafe24.com',
+         }
 }
 
 # Password validation

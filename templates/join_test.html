@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        form {
+            text-align: center;
+            background-color: yellow;
+            padding: 20px;
+            width: 500px;
+            margin: 10% auto;
+        }
+        li{ width: 280px;
+            text-align: left;
+            margin: 10px;
+            list-style: none;
+        }
+        li > input{
+           float: right
+        }
+    </style>
+</head>
+
+<body>
+    <form action="#">
+        <ul>
+        <li>
+            id <input type="text" name="user_id">
+        </li>
+        <li>
+            pw <input type="password" name="password">
+        </li>
+        <li>
+            pw_check <input type="password" name="password2">
+        </li>
+        <li>
+            email <input type="email" name="email">
+        </li>
+        <li>
+            user_name <input type="text" name="user_name">
+        </li>
+        </ul>
+        <div><input type="submit" value="회원가입"> <input type="button" onclick="" value="로그인 페이지로 이동"></div>
+    </form>
+</body></html>
