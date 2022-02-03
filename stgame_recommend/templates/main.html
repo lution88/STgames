@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+
+<meta charset="UTF-8">
+
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <link href="../static/css/styles.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="header">
+    <ul>
+        <h1>유저정보</h1>
+        <li><img src={{ user_info.pro_img_url }}></li>
+        <li>{{ user_info.nickname }}</li>
+        <li class="nav-item">
+            <a class="nav-link" href="/logout"> 로그아웃 </a>
+        </li>
+    </ul>
+</div>
+<div id="container-wrap">
+    <div class="container-header">
+        <img src="https://enewstoday.co.kr/news/photo/202002/1369655_431887_5647.jpg">
+        <img src="https://img.gta5-mods.com/q95/images/save-game-44/a82937-v_trunk_1920x1080.jpg">
+    </div>
+    <div class="container-body">
+        <div class="container-body-wrap">
+            <div class="other-users">
+                <p>사용자 이름</p>
+            </div>
+            <div class="recommend-games">
+            <p>선호게임추천</p>
+        </div>
+        </div>
+    </div>
+    <div class="container-footer">
+
+        할인중
+    </div>
+</body>
+
+</html>

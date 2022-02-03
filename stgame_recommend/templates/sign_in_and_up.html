@@ -1,0 +1,114 @@
+{#{% extends 'base.html' %}#}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,800">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'css/sign_in_and_up.css' %}">
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+</head>
+<body>
+<div class="container" id="container">
+    <div class="form-container sign-up-container">
+        <form class="sign-in-and-up-wrapper" method="post" action="/sign-up/">
+            {% csrf_token %}
+            <h1>회원가입</h1>
+            {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+            {% endif %}
+            <input type="text" placeholder="UserID" id="username" name="username"/>
+            <input type="password" placeholder="Password" id="password" name="password"/>
+            <input type="password" placeholder="Password Check" id="password2" name="password2"/>
+            <input type="text" placeholder="Nickname" id="nickname" name="nickname"/>
+            <div class="email-check-wrapper">
+                <input type="email" placeholder="Email" id="email" name="email"/>
+                <button class="email-check-btn" type="button">중복확인</button>
+            </div>
+            <button class="sign-in-and-up-btn" type="submit">회원가입</button>
+        </form>
+    </div>
+    <div class="form-container sign-in-container">
+        <form class="sign-in-and-up-wrapper" method="post" action="/sign-in/">
+            {% csrf_token %}
+            <h1>로그인</h1>
+{#            {% if error %}#}
+{#            <div class="alert alert-danger" role="alert">#}
+{#                {{ error }}#}
+{#            </div>#}
+{#            {% endif %}#}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-danger" role="alert" {% if message.tags %} {{ message.tags }} {% endif %}>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <input type="text" placeholder="UserID" id="username" name="username"/>
+            <input type="password" placeholder="Password" id="password" name="password"/>
+            <div class="find-wrapper">
+                <a href="#" id="find-id">아이디 모르냐?</a>
+                <a href="#" id="find-pw">비밀번호 모르냐?</a>
+            </div>
+            <button class="sign-in-and-up-btn" type="submit">로그인</button>
+        </form>
+    </div>
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <h1>드루와 드루와</h1>
+                <p style="font-weight: bold">게임 할거지? 드루와!</p>
+                <button class="ghost" id="sign-in">로그인</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h1>어이, 거기! 가입해!!</h1>
+                <p style="font-weight: bold">게임 하고 싶니? 네 정보를 내놔</p>
+                <button class="ghost" id="sign-up">회원가입</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-overlay" id="modal-find-id">
+    <div class="modal-window">
+        <div class="modal-title">
+            <div class="modal-title-side"></div>
+            <div>아이디 찾기</div>
+            <div class="modal-title-side">
+                <span id="close-modal-id" class="material-icons-outlined">
+                    X
+                </span>
+            </div>
+        </div>
+        <div class="find-info-wrapper">
+            <form class="find-info-form">
+                <h3>가입하신 이메일을 적으시오.</h3>
+                <input type="email" placeholder="Email" id="email" name="email"/>
+                <button type="submit" class="find-code-by-mail-btn">인증코드 받기</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal-overlay" id="modal-find-pw">
+    <div class="modal-window">
+        <div class="modal-title">
+            <div class="modal-title-side"></div>
+            <div>비밀번호 찾기</div>
+            <div class="modal-title-side">
+                <span id="close-modal-pw" class="material-icons-outlined">
+                    X
+                </span>
+            </div>
+        </div>
+        <div class="find-info-wrapper">
+            <form class="find-info-form">
+                <h3 style="margin-bottom: 2%">아래 정보를 주시오.</h3>
+                <input type="text" placeholder="UserID" id="username" name="username"/>
+                <input type="email" placeholder="Email" id="find-pw-email" name="email"/>
+                <button type="submit" class="find-code-by-mail-btn">인증코드 받기</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script src="{% static 'js/sign_in_and_up.js' %}"></script>
