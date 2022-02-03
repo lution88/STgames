@@ -55,7 +55,7 @@ def sign_up(request):
             if user_id == '' or password == '' or nickname == '' or email == '':
                 return render(request, 'sign_in_and_up.html', {'error': '칸은 제발 채워주세요!!!'})
 
-            exist_user = UserModel.objects.filter(username=user_id)
+            exist_user = UserModel.objects.filter(username=user_id) or UserModel.objects.filter(email=email)
             if exist_user:
                 return render(request, 'sign_in_and_up.html', {'error': '이미 있는 사람....'})
             else:
