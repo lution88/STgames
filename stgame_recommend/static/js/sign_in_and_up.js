@@ -42,17 +42,18 @@ buttonCloseModalPw.addEventListener('click', e => {
     document.body.style.overflowY = 'visible';
 });
 
-$('.email-check-btn').click(function (){
+$('.email-check-btn').click(function () {
     const email = $('#email').val()
-    if (email === ''){
+    if (email === '') {
         alert('이메일 입력 좀...!!!!')
     }
 
     $.ajax({
-        type: 'GET',
-        url: '/email-check?email=' + email,
+        type: 'POST',
+        url: '/email-check/',
+        data: {},
         datatype: 'json',
-        success: function (response){
+        success: function (response) {
             if (response.result !== 'success') {
                 alert(response.data)
                 return

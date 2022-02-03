@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from django.contrib.auth import get_user_model
+from django.views.decorators.csrf import csrf_exempt
+
 from .models import UserModel
 from django.contrib import messages
 
@@ -76,14 +78,19 @@ def logout(request):
     return redirect('')
 
 
+@csrf_exempt
 def email_check(request):
-    try:
-        user = get_user_model().objects.get(email=request.GET['email'])
-    except Exception as e:
-        user = None
+    if request.method == 'POST':
+        email = request.POST['email']
+        try:
+            user = UserModel.objects.get(email=email)
+        except Exception as e:
+            user = None
 
-    result = {
-        'result': 'success',
-        'data': 'not exist' if user is None else 'exist'
-    }
-    return JsonResponse(result)
+        result = {
+            'result': 'success',
+            'data': 'not exist' if user is None else 'exist'
+        }
+        return JsonResponse(result)
+    else:
+        return render(request, 'main.html')
