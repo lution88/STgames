@@ -55,7 +55,7 @@ def sign_up(request):
             if user_id == '' or password == '' or nickname == '' or email == '':
                 return render(request, 'sign_in_and_up.html', {'error': '칸은 제발 채워주세요!!!'})
 
-            exist_user = get_user_model().objects.filter(username=user_id)
+            exist_user = UserModel.objects.filter(username=user_id)
             if exist_user:
                 return render(request, 'sign_in_and_up.html', {'error': '이미 있는 사람....'})
             else:
@@ -63,15 +63,19 @@ def sign_up(request):
                 return render(request, 'sign_in_and_up.html')
 
 
+@csrf_exempt
+@login_required
 def main(request):
     return render(request, 'main.html')
 
 
+@csrf_exempt
 @login_required
 def my_page(request):
     return render(request, 'my_page.html')
 
 
+@csrf_exempt
 @login_required  # 사용자가 로그인 꼭 되어있어야 접근 가능함 표시
 def logout(request):
     auth.logout(request)
@@ -79,9 +83,26 @@ def logout(request):
 
 
 @csrf_exempt
+def id_check(request):
+    if request.method == 'POST':
+        user_id = request.POST.get('username', '')
+        try:
+            user = UserModel.objects.get(username=user_id)
+        except Exception as e:
+            user = None
+
+        result = {
+            'result': 'success',
+            'data': 'not exist' if user is None else 'exist'
+        }
+
+        return JsonResponse(result)
+
+
+@csrf_exempt
 def email_check(request):
     if request.method == 'POST':
-        email = request.POST['email']
+        email = request.POST.get('email', '')
         try:
             user = UserModel.objects.get(email=email)
         except Exception as e:
@@ -91,6 +112,5 @@ def email_check(request):
             'result': 'success',
             'data': 'not exist' if user is None else 'exist'
         }
+
         return JsonResponse(result)
-    else:
-        return render(request, 'main.html')

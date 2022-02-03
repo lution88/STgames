@@ -18,12 +18,15 @@
                 {{ error }}
             </div>
             {% endif %}
-            <input type="text" placeholder="UserID" id="username" name="username"/>
+            <div class="id-check-wrapper">
+                <input type="text" placeholder="UserID" class="id" id="username" name="username"/>
+                <button class="id-check-btn" type="button">중복확인</button>
+            </div>
             <input type="password" placeholder="Password" id="password" name="password"/>
             <input type="password" placeholder="Password Check" id="password2" name="password2"/>
             <input type="text" placeholder="Nickname" id="nickname" name="nickname"/>
             <div class="email-check-wrapper">
-                <input type="email" placeholder="Email" id="email" name="email"/>
+                <input type="email" placeholder="Email" class="email" id="email" name="email"/>
                 <button class="email-check-btn" type="button">중복확인</button>
             </div>
             <button class="sign-in-and-up-btn" type="submit">회원가입</button>

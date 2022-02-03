@@ -178,6 +178,31 @@ input {
     font-size: 1.8vh;
 }
 
+.id-check-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+}
+
+.id {
+    width: 78%;
+}
+
+.id-check-btn {
+    background-color: #ff4b2b;
+    color: white;
+
+    border-radius: 20px;
+    border-color: transparent;
+
+    height: 50%;
+
+    font-size: 1vh;
+    font-weight: bold;
+}
+
 .email-check-wrapper {
     display: flex;
     justify-content: space-between;
@@ -186,7 +211,7 @@ input {
     width: 100%;
 }
 
-#email {
+.email {
     width: 78%;
 }
 
