@@ -7,3 +7,4 @@ class UserModel(AbstractUser):
         db_table = 'user'
 
     nickname = models.CharField(max_length=256, default='')
+

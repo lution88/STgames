@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'stgame_recommend',
-    'bootstrap4',
+    # 'bootstrap4',
 ]
 
 MIDDLEWARE = [
