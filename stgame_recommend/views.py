@@ -57,7 +57,7 @@ def sign_up(request):
 
             exist_user = UserModel.objects.filter(username=user_id) or UserModel.objects.filter(email=email)
             if exist_user:
-                return render(request, 'sign_in_and_up.html', {'error': '이미 있는 사람....'})
+                return render(request, 'sign_in_and_up.html', {'error': '이미 있는 사람...중복확인 하고 가입하소!'})
             else:
                 UserModel.objects.create_user(username=user_id, password=password, nickname=nickname, email=email)
                 return render(request, 'sign_in_and_up.html')
