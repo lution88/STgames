@@ -6,11 +6,12 @@ body {
     display: flex;
     background-color: #333333;
     
-    background-image: url('../img/back1.jpg');
+    background-image: linear-gradient(rgba(0,0,0,0.7) 10%,rgba(0,0,0,0.9)), url('../img/back1.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 
 h1 {
     font-size: 15px;
@@ -51,6 +52,7 @@ img {
     margin-left: auto;
     margin-right: auto;
     padding: 40px 30px;
+    
 }
 
 #container-wrap .container-header {
@@ -93,6 +95,7 @@ img {
 }
 .container-footer{
     border: 1px solid gray;
+    border-radius: 5px;
     margin-top: 40px;
     width: 100%;
     height: 400px;
@@ -143,11 +146,13 @@ img {
     width: 200px;
 }
 .row{
-    height: 100px;
+    height: 120px;
 }
-
+.card-body{
+    margin-left: 10px;
+}
 .gameimg img{
-    padding: 5px;
     width: 200px;
     height: 100px;
+    margin: 10px;
 }

@@ -140,3 +140,5 @@ def email_check(request):
         }
 
         return JsonResponse(result)
+
+def test(request): return render(request, 'my_page.html')
