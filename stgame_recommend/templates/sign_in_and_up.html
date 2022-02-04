@@ -101,7 +101,8 @@
             </div>
         </div>
         <div class="find-info-wrapper">
-            <form class="find-info-form">
+            <form class="find-info-form" method="post" action="/find-id/">
+                {% csrf_token %}
                 <h3>가입하신 이메일을 적으시오.</h3>
                 <input type="email" placeholder="메일" id="email" name="email"/>
                 <button type="submit" class="find-code-by-mail-btn">인증코드 받기</button>
@@ -123,7 +124,8 @@
             </div>
         </div>
         <div class="find-info-wrapper">
-            <form class="find-info-form">
+            <form class="find-info-form" method="post" action="/find-pw/">
+                {% csrf_token %}
                 <h3 style="margin-bottom: 2%">아래 정보를 주시오.</h3>
                 <input type="text" placeholder="아이디 (ex. calm82)" id="username" name="username"/>
                 <input type="email" placeholder="메일" id="find-pw-email" name="email"/>
