@@ -2,10 +2,12 @@ const signUpButton = document.getElementById("sign-up");
 const signInButton = document.getElementById("sign-in");
 const container = document.getElementById("container");
 
+// 회원가입 폼으로 넘어가는 버튼
 signUpButton.addEventListener("click", () => {
     container.classList.add("right-panel-active");
 });
 
+// 로그인 폼으로 넘어가는 버튼
 signInButton.addEventListener("click", () => {
     container.classList.remove("right-panel-active");
 });
@@ -42,10 +44,12 @@ buttonCloseModalPw.addEventListener('click', e => {
     document.body.style.overflowY = 'visible';
 });
 
+// 아이디 중복 확인 및 유효성 검사
 $('.id-check-btn').click(function () {
     const username = $('#username').val()
     if (username === '') {
-        alert('아이디 입력 좀...!!!!')
+        alert('빈칸은 채워 주세요!')
+        $('.id').css('border','3px solid red')
         return
     }
 
@@ -56,23 +60,28 @@ $('.id-check-btn').click(function () {
         datatype: 'json',
         success: function (response) {
             if (response.result !== 'success') {
+                alert('올바른 아이디를 적어 주세요!')
+                $('.id').css('border','3px solid red')
                 return
             }
 
             if (response.data === 'exist') {
-                alert('그 아이디는 이미 있소!')
+                alert('다른 아이디를 사용해 주세요!')
                 $('#username').val('').focus()
             } else {
-                alert('좋아, 사용 가능하군!!')
+                alert('사용 가능한 아이디입니다!')
             }
         }
     })
 })
 
+
+// 이메일 중복 확인 및 유효성 검사
 $('.email-check-btn').click(function () {
     const email = $('#email').val()
     if (email === '') {
-        alert('이메일 입력 좀...!!!!')
+        alert('빈칸은 채워 주세요!')
+        $('.email').css('border','3px solid red')
         return
     }
 
@@ -83,14 +92,16 @@ $('.email-check-btn').click(function () {
         datatype: 'json',
         success: function (response) {
             if (response.result !== 'success') {
+                alert('올바른 메일을 적어 주세요!')
+                $('.email').css('border','3px solid red')
                 return
             }
 
             if (response.data === 'exist') {
-                alert('그 이메일은 이미 있소!')
-                $('#email').val('').focus()
+                alert('다른 메일을 사용해 주세요!')
+                $('#email').val('')
             } else {
-                alert('좋아, 사용 가능하군!!')
+                alert('사용 가능한 메일입니다!')
             }
         }
     })
