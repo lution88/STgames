@@ -39,6 +39,12 @@ urlpatterns = [
     # 이메일 중복 확인 url
     path('email-check/', views.email_check, name='email-check'),
 
+    # 아이디 찾기 url
+    path('find-id/', views.find_id, name='find-id'),
+
+    # 비밀번호 찾기 url
+    path('find-pw/', views.find_pw, name='find-pw'),
+
     # 메인 페이지 url
     path('main/', views.main, name='main'),
 
