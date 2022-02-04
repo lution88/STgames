@@ -42,21 +42,50 @@ buttonCloseModalPw.addEventListener('click', e => {
     document.body.style.overflowY = 'visible';
 });
 
-$('.email-check-btn').click(function (){
-    const email = $('#email').val()
-    if (email === ''){
-        alert('이메일 입력 좀...!!!!')
+$('.id-check-btn').click(function () {
+    const username = $('#username').val()
+    if (username === '') {
+        alert('아이디 입력 좀...!!!!')
+        return
     }
 
     $.ajax({
-        type: 'GET',
-        url: '/email-check?email=' + email,
+        type: 'POST',
+        url: '/id-check/',
+        data: {username: username},
         datatype: 'json',
-        success: function (response){
+        success: function (response) {
             if (response.result !== 'success') {
-                alert(response.data)
                 return
             }
+
+            if (response.data === 'exist') {
+                alert('그 아이디는 이미 있소!')
+                $('#username').val('').focus()
+            } else {
+                alert('좋아, 사용 가능하군!!')
+            }
+        }
+    })
+})
+
+$('.email-check-btn').click(function () {
+    const email = $('#email').val()
+    if (email === '') {
+        alert('이메일 입력 좀...!!!!')
+        return
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: '/email-check/',
+        data: {email: email},
+        datatype: 'json',
+        success: function (response) {
+            if (response.result !== 'success') {
+                return
+            }
+
             if (response.data === 'exist') {
                 alert('그 이메일은 이미 있소!')
                 $('#email').val('').focus()
