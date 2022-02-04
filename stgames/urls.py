@@ -25,4 +25,5 @@ urlpatterns = [
     path('email-check/', views.email_check, name='email-check'),
     path('main/', views.main, name='main'),
     path('my-page/', views.my_page, name='my-page'),
+    path('logout/', views.logout, name='logout')
 ]

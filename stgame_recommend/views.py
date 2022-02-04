@@ -1,3 +1,6 @@
+import requests
+from bs4 import BeautifulSoup
+
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -5,7 +8,7 @@ from django.contrib import auth
 from django.contrib.auth import get_user_model
 from .models import UserModel
 from django.contrib import messages
-
+from django.views.decorators.csrf import csrf_exempt
 
 def index(request):
     return render(request, 'sign_in_and_up.html')
@@ -61,8 +64,33 @@ def sign_up(request):
                 return render(request, 'sign_in_and_up.html')
 
 
+@csrf_exempt
+@login_required
 def main(request):
-    return render(request, 'main.html')
+    headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+    data = requests.get('https://store.steampowered.com/search/?filter=topsellers',headers=headers)
+
+    soup = BeautifulSoup(data.text, 'html.parser')
+    games = soup.select('#search_resultsRows > a')
+    game_list = []
+    i = 1
+    for game in games:
+        image = game.select_one('div.col.search_capsule > img')['src']
+        title = game.select_one('div.responsive_search_name_combined > div.col.search_name.ellipsis > span').text
+        release_date = game.select_one('div.responsive_search_name_combined > div.col.search_released.responsive_secondrow').text
+        price = game.select_one('div.responsive_search_name_combined > div.col.search_price_discount_combined.responsive_secondrow > div.col.search_price.responsive_secondrow').text.strip().split('₩ ')[1]
+
+        games_list = {
+            'index': i,
+            'image': image,
+            'title': title,
+            'release_date': release_date,
+            'price': price,
+        }
+        game_list.append(games_list)
+        i += 1
+
+    return render(request, 'main.html', {'games':game_list[:10]})
 
 
 @login_required
@@ -73,7 +101,7 @@ def my_page(request):
 @login_required  # 사용자가 로그인 꼭 되어있어야 접근 가능함 표시
 def logout(request):
     auth.logout(request)
-    return redirect('')
+    return redirect('/')
 
 
 def email_check(request):
