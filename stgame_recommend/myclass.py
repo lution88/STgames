@@ -1,6 +1,11 @@
 # 크롤링 ImgPrice('URL') >> class.img()>> 'http~~~~~'
+from re import U
 import requests
 from bs4 import BeautifulSoup
+import pandas as pd
+import numpy as np
+
+
 
 
 class ImgPrice:
@@ -24,7 +29,21 @@ class ImgPrice:
         result = self.soup.select_one('#appHubAppName').getText()
         return result
 
+# print(ImgPrice('https://store.steampowered.com/app/1043870/Dark_Forest/').price())
 
 # 클래스#appHubAppName
 
-print(ImgPrice('https://store.steampowered.com/app/1043870/Dark_Forest/').price())
+
+def take_url(file):
+    df = pd.read_csv(f'/home/tete/stgames/{file}', encoding='utf-8')
+    urls = df['url']
+    game_list = []
+    for url in urls:
+        try:
+            u = url.split('/')[4]
+            game_list.append(u)
+        except:
+            print('None')
+    return game_list
+game_id = take_url('steam_games.csv')[:100]
+print(game_id)
