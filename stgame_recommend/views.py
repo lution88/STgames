@@ -1,11 +1,16 @@
 from django.http import JsonResponse
+from django.template.loader import render_to_string
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+
 from django.contrib import auth
-from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+
+from django.core.mail import EmailMessage
+
 import re
 
+from django.conf import settings
 from .models import UserModel
 from django.contrib import messages
 
@@ -139,6 +144,39 @@ def email_check(request):
 
             result = {'result': 'fail'}
             return JsonResponse(result)
+
+
+def find_id(request):
+    context = {}
+    if request.method == 'POST':
+        email = request.POST.get('email', '')
+        reg = re.compile('^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
+
+        if reg.match(email):
+
+            try:
+                user = UserModel.objects.get(email=email)
+
+                if user is not None:
+                    email_template = render_to_string('find_id_email_template.html',
+                                                      {'username': user.username, 'nickname': user.nickname})
+                    method_email = EmailMessage(
+                        '당신의 아이디가 메일에 있습니다.',
+                        email_template,
+                        settings.EMAIL_HOST_USER,
+                        [email],
+                    )
+                    method_email.send(fail_silently=False)
+                    return render(request, 'sign_in_and_up.html', context)
+            except Exception as e:
+                messages.info(request, '입력하신 아이디에 맞는 이메일이 없습니다. 다시 확인해 주세요!')
+    context = {}
+    return render(request, 'sign_in_and_up.html', context)
+
+
+def find_pw(request):
+    dd = ''
+    return
 
 
 def test(request):

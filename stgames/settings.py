@@ -36,7 +36,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'stgame_recommend',
-    # 'bootstrap4',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +135,15 @@ STATICFILES_DIRS = [
 ]
 
 AUTH_USER_MODEL = 'stgame_recommend.UserModel'
+
+# 호스트 유저 email 정보
+EMAIL_HOST = 'smtp.naver.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'dydgjs7878@naver.com'
+EMAIL_HOST_PASSWORD = 'caldron050'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
