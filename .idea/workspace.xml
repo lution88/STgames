@@ -5,21 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e7811d3-74fd-458d-a283-25c4127a7cbc" name="Changes" comment="Changes">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/STgames.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/STgames.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgame_recommend/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/stgame_recommend/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgame_recommend/templates/main.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgame_recommend/templates/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/stgame_recommend/templates/main.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgame_recommend/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/stgame_recommend/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgame_recommend/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/stgame_recommend/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgames/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/stgames/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgames/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/stgames/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -191,7 +177,7 @@
       <workItem from="1644169604773" duration="11000" />
       <workItem from="1644194047904" duration="12219000" />
       <workItem from="1644211633867" duration="909000" />
-      <workItem from="1644222725922" duration="15006000" />
+      <workItem from="1644222725922" duration="15339000" />
     </task>
     <servers />
   </component>
@@ -203,7 +189,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
