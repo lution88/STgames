@@ -148,5 +148,7 @@ EMAIL_HOST_PASSWORD = get_secret("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# 비밀번호 초기화 링크 보안 접속
+# SECURE_SSL_REDIRECT = True
