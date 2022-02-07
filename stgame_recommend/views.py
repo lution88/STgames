@@ -1,6 +1,8 @@
+import random
+
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, resolve_url
 
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
@@ -14,6 +16,11 @@ from django.conf import settings
 from .models import UserModel
 from django.contrib import messages
 
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, \
+                                      PasswordResetConfirmView, PasswordResetCompleteView
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
+from django.urls import reverse_lazy
+
 
 # 시작 페이지(로그인 및 회원가입)
 def index(request):
@@ -21,6 +28,7 @@ def index(request):
 
 
 # 로그인
+@csrf_exempt
 def sign_in(request):
     if request.method == 'POST':
         user_id = request.POST.get('username', '')
@@ -43,6 +51,7 @@ def sign_in(request):
 
 
 # 회원가입
+@csrf_exempt
 def sign_up(request):
     if request.method == 'GET':
         user = request.user.is_authenticated
@@ -146,6 +155,8 @@ def email_check(request):
             return JsonResponse(result)
 
 
+# 아이디 찾기 함수
+@csrf_exempt
 def find_id(request):
     context = {}
     if request.method == 'POST':
@@ -161,22 +172,71 @@ def find_id(request):
                     email_template = render_to_string('find_id_email_template.html',
                                                       {'username': user.username, 'nickname': user.nickname})
                     method_email = EmailMessage(
-                        '당신의 아이디가 메일에 있습니다.',
+                        '회원님의 아이디가 도착했습니다.',
                         email_template,
                         settings.EMAIL_HOST_USER,
-                        [email],
+                        [email]
                     )
                     method_email.send(fail_silently=False)
                     return render(request, 'sign_in_and_up.html', context)
             except Exception as e:
-                messages.info(request, '입력하신 아이디에 맞는 이메일이 없습니다. 다시 확인해 주세요!')
+                messages.info(request, '입력한 이메일이 없습니다. 다시 확인해 주세요!')
     context = {}
     return render(request, 'sign_in_and_up.html', context)
 
 
+# 비밀번호 찾기 함수
+@csrf_exempt
 def find_pw(request):
-    dd = ''
-    return
+    if request.method == 'POST':
+        user_id = request.POST.get('username', '')
+
+        try:
+            user = UserModel.objects.get(username=user_id)
+
+            if user is not None:
+                return redirect('/password_reset')
+        except Exception as e:
+            messages.info(request, '입력한 아이디가 없습니다. 다시 확인해 주세요!')
+    return render(request, 'sign_in_and_up.html')
+
+
+# 비밀번호 초기화 메일 보내기
+class UserPasswordResetView(PasswordResetView):
+    template_name = 'password_reset.html'
+    success_url = reverse_lazy('password_reset_done')
+    form_class = PasswordResetForm
+
+    def form_valid(self, form):
+        if UserModel.objects.filter(email=self.request.POST.get('email')).exists():
+            return super().form_valid(form)
+        else:
+            return render(self.request, 'password_reset_done_fail.html')
+
+
+# 비밀번호 초기화 메일 보내기 성공
+class UserPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'password_reset_done.html'
+
+
+# 새 비밀번호 설정
+class UserPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'password_reset_confirm.html'
+    success_url = reverse_lazy('password_reset_complete')
+    form_class = SetPasswordForm
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+
+# 새 비밀번호 설정 완료
+class UserPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'password_reset_complete.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['login_url'] = resolve_url('sign_in_and_up.html')
+        return context
 
 
 def test(request):
