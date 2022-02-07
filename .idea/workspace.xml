@@ -4,7 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e7811d3-74fd-458d-a283-25c4127a7cbc" name="Changes" comment="Changes" />
+    <list default="true" id="0e7811d3-74fd-458d-a283-25c4127a7cbc" name="Changes" comment="Changes">
+      <change afterPath="$PROJECT_DIR$/.python-version" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stgame_recommend/migrations/0003_favoritegames_rename_user_id_games_game_id_and_more.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stgame_recommend/static/img/kakao.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stgames/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stgames/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stgames/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stgames/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stgames/.idea/stgames.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stgames/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/steam_games.csv" beforeDir="false" afterPath="$PROJECT_DIR$/steam_games.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stgame_recommend/static/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/stgame_recommend/static/css/main.css" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -176,6 +190,7 @@
       <workItem from="1644194047904" duration="12219000" />
       <workItem from="1644211633867" duration="909000" />
       <workItem from="1644222725922" duration="15579000" />
+      <workItem from="1644241142219" duration="1173000" />
     </task>
     <servers />
   </component>
