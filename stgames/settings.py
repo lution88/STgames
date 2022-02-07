@@ -1,5 +1,6 @@
 import json
 import os
+
 from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -10,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 secret_file = os.path.join(BASE_DIR, 'secret.json')
-
+#
 with open(secret_file) as f:
     secrets = json.loads(f.read())
 
@@ -21,11 +22,13 @@ def get_secret(setting, secrets=secrets):
     except KeyError:
         error_msg = f'{setting}을 다시 확인하세요!'
         raise ImproperlyConfigured(error_msg)
-
+#
 
 SECRET_KEY = get_secret('SECRET_KEY')
 
+# SECRET_KEY = 'jyw%fci813u#itc&@8ljou-fqo_et_5czrdna3dxzn0-w+%3r^'
 # SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = True
 
 ALLOWED_HOSTS = []

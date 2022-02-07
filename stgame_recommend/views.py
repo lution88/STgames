@@ -11,8 +11,31 @@ from django.core.mail import EmailMessage
 import re
 
 from django.conf import settings
-from .models import UserModel
+from .models import UserModel, FavoriteGames
 from django.contrib import messages
+
+import requests
+from bs4 import BeautifulSoup
+
+from stgame_recommend.makeit_to_class import CollaborateFiltering
+
+import numpy as np
+import pandas as pd
+import time
+import tensorflow.compat.v1 as tf
+import random
+from collections import Counter
+from sklearn.metrics import roc_curve, auc, average_precision_score
+from sklearn.metrics.pairwise import linear_kernel, cosine_similarity
+
+import os
+import django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'stgames.settings')
+django.setup()
+
+from .models import RecommendGames
+from .models import SimilarUser
+# import random
 
 
 # 시작 페이지(로그인 및 회원가입)
@@ -76,7 +99,51 @@ def sign_up(request):
 @csrf_exempt
 @login_required
 def main(request):
-    return render(request, 'main.html')
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+    data = requests.get('https://store.steampowered.com/specials/', headers=headers)
+
+    soup = BeautifulSoup(data.text, 'html.parser')
+    games = soup.select('#NewReleasesRows > a')
+    game_list = []
+    i = 1
+    for game in games:
+        image = game.select_one('div.tab_item_cap > img')['src']
+        title = game.select_one('div.tab_item_content > div.tab_item_name').text
+        discount_per = game.select_one('div.discount_block.tab_item_discount > div.discount_pct').text
+        original_price = game.select_one('div.discount_block.tab_item_discount > div.discount_prices > div.discount_original_price').text
+        discount_price = game.select_one('div.discount_block.tab_item_discount > div.discount_prices > div.discount_final_price').text
+
+        games_list = {
+            'index': i,
+            'image': image,
+            'title': title,
+            'discount_per': discount_per,
+            'original_price': original_price,
+            'discount_price': discount_price
+        }
+        game_list.append(games_list)
+        i += 1
+
+    # new_user = np.random.rand(1, 5064)
+    # apply_lambda = lambda x: 1 if x > 0.99 else 0
+    # new_user = new_user.reshape(5064, )
+    # tt = np.array([apply_lambda(xi) for xi in new_user])
+    # tt = tt.reshape(1, 5064)
+    # make_random_time = lambda x: random.randint(10, 90) if x == 1 else 0
+    # tt_time = np.array([make_random_time(xi) for xi in tt.reshape(5064, )])
+    # tt_time.reshape(5064, )
+    #
+    # temp = CollaborateFiltering()
+    # temp.add_new_user(tt_time)
+    # temp.train_data()
+    #
+    # recommend_result = temp.eval_result()
+    # print("추천게임 : ", recommend_result)
+    # simmilar_user = temp.recommend_sim_user()
+    # print("비슷한유저 : ", simmilar_user)
+
+    # return render(request, 'main.html', {'games':game_list[:10], 'recommend':recommend_result, 'sim_user':simmilar_user})
+    return render(request, 'main.html', {'games':game_list[:20]})
 
 
 # 마이 페이지(로그인 한 유저 정보)
@@ -91,7 +158,7 @@ def my_page(request):
 @login_required  # 사용자가 로그인 꼭 되어있어야 접근 가능함 표시
 def logout(request):
     auth.logout(request)
-    return redirect('')
+    return redirect('/sign-in/')
 
 
 # 아이디 중복 확인 및 유효성 검사
@@ -181,3 +248,63 @@ def find_pw(request):
 
 def test(request):
     return render(request, 'my_page.html')
+
+def take_url(request):
+    df = pd.read_csv('C:/Users/lutio/Desktop/13_stgames/stgames/steam_games.csv', encoding='utf-8')
+    urls = df['url']
+    game_list = []
+    for url in urls:
+        try:
+            u = url.split('/')[4]
+            game_list.append(FavoriteGames(game_id=u))
+        except:
+            print('None')
+
+    i = 0
+    j = 1
+    while True:
+        try:
+            FavoriteGames.objects.bulk_create(game_list[i:j])
+            i = j
+            j += 1
+            print(f'{i}개 완료', )
+            time.sleep(1)
+        except:
+            print("에러발생")
+            i += 1
+            j += 1
+    return render(request, 'main.html')
+
+
+
+def tensorflow(request):
+    new_user = np.random.rand(1, 5064)
+    apply_lambda = lambda x: 1 if x > 0.99 else 0
+    new_user = new_user.reshape(5064, )
+    tt = np.array([apply_lambda(xi) for xi in new_user])
+    tt = tt.reshape(1, 5064)
+    make_random_time = lambda x: random.randint(10, 90) if x == 1 else 0
+    tt_time = np.array([make_random_time(xi) for xi in tt.reshape(5064, )])
+    tt_time.reshape(5064, )
+
+    temp = CollaborateFiltering()
+    temp.add_new_user(tt_time)
+    temp.train_data()
+
+    recommend_result = temp.eval_result()
+    print("추천게임 : ", recommend_result)
+    similar_user = temp.recommend_sim_user()
+    print("비슷한유저 : ", similar_user)
+
+    name = user.username
+    RecommendGames.objects.create(rec_game=rec_result)
+
+
+    all_info = RecommendGames.objects.all()
+    print(all_info)
+    # rec_info = all_info['rec_result']
+    # sim_user = all_info['sim_user']
+    # sim_game_list = all_info['sim_game_list']
+
+
+    return render(request, 'main.html')

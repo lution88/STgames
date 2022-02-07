@@ -50,4 +50,7 @@ urlpatterns = [
 
     # 마이 페이지 url
     path('my-page/', views.my_page, name='my-page'),
+
+    # 로그아웃
+    path('logout/', views.logout, name='logout')
 ]
