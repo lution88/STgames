@@ -1,0 +1,30 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "askForPassword": true,
+            "driver": "MariaDB",
+            "username": "redeyes1234",
+            "database": "umj7-015.cafe24.com",
+            "name": "asd"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MariaDB",
+            "name": "asd",
+            "database": "umj7-015.cafe24.com",
+            "username": "redeyes1234",
+            "password": "python!1004"
+        }
+    ]
+}
