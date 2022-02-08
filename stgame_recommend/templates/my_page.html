@@ -1,0 +1,457 @@
+{#<!doctype html>#}
+{#<html lang="ko">#}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+
+    <!-- bootstrap 사용 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- fontawesome 사용 -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+          integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href={% static "css/my_page.css" %}>
+
+    <!-- jQuery -->
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+    <!-- spin js 라이브러리 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.js"></script>
+    <script>
+        /*
+    	[JS 요약 설명]
+    	1. window.onload : 브라우저 로드 완료 상태를 나타냅니다
+    	2. spin js : 브라우저 내에서 로딩 스핀 상태를 나타낼 수 있습니다
+    	3. 로직 : 사용자 통신 요청 시 >> spinnerStart 호출 >> 리턴 응답 받을 시 >> spinnerStop 호출
+    	4. 옵션 참고 공식 사이트 : https://spin.js.org/
+    	*/
+
+
+        /* [html 최초 로드 및 이벤트 상시 대기 실시] */
+        window.onload = function () {
+            console.log("");
+            console.log("[window onload] : [start]");
+            console.log("");
+
+            // 로딩 스피너 호출
+            //spinnerStart();
+
+            /* setTimeout 호출 : 일정 시간 후 실행 : [함수호출] 일회용 */
+            //setTimeout(spinnerStop, 3000); //5초후에 spinnerStop() 함수 호출
+        };
+
+
+        /* [spinnerStart 시작 이벤트 호출] */
+        function spinnerStart() {
+            console.log("");
+            console.log("[spinnerStart] : " + "[start]");
+            console.log("");
+
+            // [로딩 부모 컨테이너 동적 생성]
+            var createLayDiv = document.createElement("div");
+            createLayDiv.setAttribute("id", "spinnerLay1000");
+            var createLayDivStyle = "width:100%; height:100%; margin:0 auto; padding:0; border:none;";
+            createLayDivStyle = createLayDivStyle + " float:top; position:fixed; top:0%; z-index:100000;";
+            createLayDivStyle = createLayDivStyle + " background-color:rgba(0, 0, 0, 0.8);"; // 불투명도 설정 >> 자식에게 적용 안됨
+            createLayDiv.setAttribute("style", createLayDivStyle);
+            document.body.appendChild(createLayDiv); //body에 추가 실시
+
+
+            // [실제 스핀 수행 컨테이너 동적 생성]
+            var createSpinDiv = document.createElement("div");
+            createSpinDiv.setAttribute("id", "spinnerContainer1000");
+            var createSpinDivStyle = "width:100px; height:100px; margin:0 auto; padding:0; border:none;"; // 스핀 컨테이너 크기 조절
+            createSpinDivStyle = createSpinDivStyle + " float:top; position:relative; top:40%;";
+            //createSpinDivStyle = createSpinDivStyle + " background-color:#ff0000;";
+            createSpinDiv.setAttribute("style", createSpinDivStyle);
+            document.getElementById("spinnerLay1000").appendChild(createSpinDiv); //spinnerLay에 추가 실시
+
+
+            // [스핀 옵션 지정 실시]
+            var opts = {
+                {#lines: 20, // 그릴 선의 수 [20=원형 / 10=막대] [The number of lines to draw]#}
+                {#length: 80, // 각 줄의 길이 [0=원형 / 10=막대] [The length of each line]#}
+                {#width: 14, // 선 두께 [The line thickness]#}
+                {#radius: 84, // 내부 원의 반지름 [The radius of the inner circle]#}
+                {#scale: 1, // 스피너의 전체 크기 지정 [Scales overall size of the spinner]#}
+                {#corners: 1, // 모서리 라운드 [Corner roundness (0..1)]#}
+                {#animation: 'spinner-line-fade-more',#}
+                {#color: '#d50000', // 로딩 CSS 색상 [CSS color or array of colors]#}
+                {#fadeColor: 'transparent', // 로딩 CSS 색상 [CSS color or array of colors]#}
+                {#opacity: 0.05, // 선 불투명도 [Opacity of the lines]#}
+                {#rotate: 0, // 회전 오프셋 각도 [The rotation offset]#}
+                {#direction: 1, // 회전 방향 시계 방향, 반시계 방향 [1: clockwise, -1: counterclockwise]#}
+                {#speed: 1, // 회전 속도 [Rounds per second]#}
+                {#trail: 74, // 꼬리 잔광 비율 [Afterglow percentage]#}
+                {#fps: 20, // 초당 프레임 수 [Frames per second when using setTimeout() as a fallback in IE 9]#}
+                {#zIndex: 2e9, // 인덱스 설정 [The z-index (defaults to 2000000000)]#}
+                {#position: 'absolute'#}
+                lines: 20, // The number of lines to draw
+                length: 80, // The length of each line
+                width: 14, // The line thickness
+                radius: 84, // The radius of the inner circle
+                scale: 1, // Scales overall size of the spinner
+                corners: 0, // Corner roundness (0..1)
+                speed: 0.5, // Rounds per second
+                rotate: 0, // The rotation offset
+                animation: 'spinner-line-fade-more', // The CSS animation name for the lines
+                direction: 1, // 1: clockwise, -1: counterclockwise
+                color: '#fa0000', // CSS color or array of colors
+                fadeColor: 'transparent', // CSS color or array of colors
+                shadow: '1 210px transparent', // Box-shadow for the lines
+                zIndex: 2000000000, // The z-index (defaults to 2e9)
+                className: 'spinner', // The CSS class to assign to the spinner
+                position: 'absolute' // Element positioning
+            };
+
+
+            // [스피너 매핑 및 실행 시작]
+            var target = document.getElementById("spinnerContainer1000");
+            var spinner = new Spinner(opts).spin(target);
+        };
+
+
+        /* [spinnerStop 중지 이벤트 호출] */
+        function spinnerStop() {
+            console.log("");
+            console.log("[spinnerStop] : " + "[start]");
+            console.log("");
+            try {
+                // [로딩 부모 컨테이너 삭제 실시]
+                var tagId = document.getElementById("spinnerLay1000");
+                document.body.removeChild(tagId); //body에서 삭제 실시
+            } catch (exception) {
+                // console.error("catch : " + "not find spinnerLay1000");
+            }
+
+        };
+        //______----------____________------------
+
+        var toggle_state = true;
+        var games = '';
+
+        function search(target) {
+            var word = target.value;
+            console.log(word)
+            //ajax 장고의 경우 request의 body에 객체를 담아서 보낸다
+            $.ajax({
+                type: 'POST',
+                data: {'search': word},
+                dataType: 'json',
+                url: {% url 'test' %},
+                error: function (err) {
+                    console.log("실행중 오류가 발생하였습니다.");
+                },
+                success: function (data) {
+                    console.log("data확인 : " + data);
+                    console.log(data.game);
+                    $("#games").empty();
+                    for (i = 0; i < data.game.length; i++) {
+                        $("#games").append(`<div class="form-check">
+                            <input class="form-check-input" type="radio" name="game_list" class="game_list" id="flexRadioDefault${i}" value="${data.game[i]['game']}">
+                            <label class="form-check-label" for="flexRadioDefault${i}"> ${data.game[i]['game']}
+                            </label>
+                            </div>`);
+                    }
+                }
+            });
+            //end Ajax
+        }
+
+
+        $(document).on('click', "#send_data", function () {
+            games = $('input[name="game_list"]:checked').val();
+            if (toggle_state && games != null) {
+                //console.log(games);
+                $("#games").empty();
+                $("#games").append(`<div class="col-auto">
+                                        <input type="text" readonly class="form-control-plaintext" id="game_title" value="${games}">
+                                  </div>
+                                  <div class="col-auto">
+                                        <label for="inputPassword2" class="visually-hidden">Password</label>
+                                        <input type="number" class="form-control" id="play_time" placeholder="플레이 한 시간 ex) 8">
+                                  </div>`);
+                toggle_state = false;
+            } else {
+                games = $('#game_title').val();
+                if (games != null) {
+                    let play_time = $('#play_time').val();
+                    console.log(play_time);
+                    $.ajax({
+                        type: 'POST',
+                        data: {'game_name': games, 'play_time': play_time},
+                        dataType: 'json',
+                        url: {% url 'test2' %},
+                        beforeSend: function () {
+                            spinnerStart();
+                        },
+                        error: function (err) {
+                            console.log("실행중 오류가 발생하였습니다.");
+                        },
+                        success: function (data) {
+                            spinnerStop()
+                            console.log("data확인 : " + data['msg']);
+                            location.reload();
+                        }
+                    });
+                    console.log(games);
+                    console.log('뭔가 있음')
+                } else {
+                    toggle_state = true;
+                    $("#games").empty();
+                    console.log(games);
+                    console.log(toggle_state);
+                    console.log('아무것도');
+                }
+
+            }
+
+        })
+
+    </script>
+
+</head>
+
+<body>
+<header class="container-fluid">
+    <div class="row">
+        <div class="col-md-9" id="logo">{{ user.nickname }}님의 Page</div>
+        <div class="col-md-2" id="go_home_button"><img
+                src="https://store.cloudflare.steamstatic.com/public/shared/images/header/logo_steam.svg?t=962016"
+        ></div>
+        <div class="col-md-1" id="logout_button">로그아웃</div>
+    </div>
+</header>
+<nav>
+
+</nav>
+<section class="container">
+    <div class="row" id="header_article">
+        <div class="col-md-8" id="left_article">
+            <div class="col-md-4" id="profile_img">
+                {% if user.pro_img_url == '' %}
+                    <img src="https://illumesense.com/resources/illumesense/style/img/website/profile-picture-blanks/male-profile.jpg"
+                         alt="">
+                {% else %}
+                    {{ user.pro_img_url }}
+                {% endif %}
+            </div>
+            <div class="col-md-8" id="profile">
+                <ul>
+                    <li>ID : <span>{{ user.username }}</span></li>
+                    <li>닉네임 : <span>{{ user.nickname }}</span></li>
+                    <li><i class="far fa-envelope fa-lg"></i> <span>{{ user.email }}</span></li>
+                    <li>가입일 : <span>{{ user.date_joined }}</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-4" id="right_article">
+            <div id="recommend_game">
+                <img src="{{ img }}" alt="">
+                <p><h4>GameTitle</h4></p>
+            </div>
+            <div class="d-grid gap-2" id="interest">
+
+                <!-- Button trigger modal -->
+                <button class="btn btn-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    관심항목 추가하는 버튼
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="선호 게임 검색"
+                                           aria-label="" aria-describedby="button-addon2" onkeyup="search(this)">
+                                    <button class="btn btn-outline-secondary" id="button-addon2" onclick="search()">검색
+                                    </button>
+                                </div>
+                                <div id="games">
+                                    {#                                    <div class="form-check">#}
+                                    {#                                        <input class="form-check-input" type="radio" name="flexRadioDefault"#}
+                                    {#                                               id="flexRadioDefault1">#}
+                                    {#                                        <label class="form-check-label" for="flexRadioDefault1">#}
+                                    {#                                            Default radio#}
+                                    {#                                        </label>#}
+                                    {#                                    </div>#}
+                                    {#                                    <input id="play_time" type="number" placeholder="플레이 시간 ex: 82">ddd</input>#}
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="send_data">
+                                    Understood
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div id="article">
+        <div id="game_list">
+            <ul>
+                <li>
+                    <div class="card mb-3 " style="max-width: 100%;">
+                        <div class="row g-0">
+                            <div class="col-md-2 game-img">
+                                <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header_koreana.jpg?t=1621944801"
+                                     class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-10">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <p class="card-text">This is a wider card with supporting text below as a natural
+                                        lead-in to additional content. This content is a little bit longer.</p>
+                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="card mb-3 " style="max-width: 100%;">
+                        <div class="row g-0">
+                            <div class="col-md-2 game-img">
+                                <img src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/578080/f1e2c790bc051b833b7998896bf879b2a543fbe9.jpg"
+                                     class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-10">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <p class="card-text">This is a wider card with supporting text below as a natural
+                                        lead-in to additional content. This content is a little bit longer.</p>
+                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="card mb-3 " style="max-width: 100%;">
+                        <div class="row g-0">
+                            <div class="col-md-2 game-img">
+                                <img src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/108600/391ddf7e88fb4517d3d11bb11373af3a8cc3bd3b.jpg"
+                                     class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-10">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <p class="card-text">This is a wider card with supporting text below as a natural
+                                        lead-in to additional content. This content is a little bit longer.</p>
+                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="card mb-3 " style="max-width: 100%;">
+                        <div class="row g-0">
+                            <div class="col-md-2 game-img">
+                                <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1435790/capsule_sm_120.jpg?t=1642344571"
+                                     class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-10">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <p class="card-text">This is a wider card with supporting text below as a natural
+                                        lead-in to additional content. This content is a little bit longer.</p>
+                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="card mb-3 " style="max-width: 100%;">
+                        <div class="row g-0">
+                            <div class="col-md-2 game-img">
+                                <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/header.jpg?t=1618851907"
+                                     class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-10">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <p class="card-text">This is a wider card with supporting text below as a natural
+                                        lead-in to additional content. This content is a little bit longer.</p>
+                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="card mb-3 " style="max-width: 100%;">
+                        <div class="row g-0">
+                            <div class="col-md-2 game-img">
+                                <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1551360/header.jpg?t=1643831870"
+                                     class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-10">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <p class="card-text">This is a wider card with supporting text below as a natural
+                                        lead-in to additional content. This content is a little bit longer.</p>
+                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+<aside>
+</aside>
+<footer class="container-fluid">
+    <div class="row justify-content-md-center">
+        <div class="col col-md-1">
+            <img id="footer-img"
+                 src="https://illumesense.com/resources/illumesense/style/img/website/platform/tech_bg_2.jpg" alt="">
+        </div>
+        <div class="col-md-8">
+            <div>copyright@어쩌고 저쩌고</div>
+            <div class="col-md-12">
+                <ul>
+                    <li>개인정보 보호정책</li>
+                    <li> |</li>
+                    <li>법적 고지</li>
+                    <li> |</li>
+                    <li>Steam 이용 약관</li>
+                    <li> |</li>
+                    <li>쿠키</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+<p>
+<ul>
+    {#    {% for x in game %}#}
+    <li style="background-color: red">{{ game.game }}</li>
+    {#    {% endfor %}#}
+</ul>
+
+
+</p>
+</body>
+{#</html>#}
