@@ -11,15 +11,97 @@
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
           integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link rel="stylesheet" href="../static/css/my_page.css">
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+
+    <script>
+        var toggle_state = true;
+        var games = '';
+
+        function search(target) {
+            var word = target.value;
+            console.log(word)
+            //ajax 장고의 경우 request의 body에 객체를 담아서 보낸다
+            $.ajax({
+                type: 'POST',
+                data: {'search': word},
+                dataType: 'json',
+                url: {% url 'test' %},
+                error: function (err) {
+                    console.log("실행중 오류가 발생하였습니다.");
+                },
+                success: function (data) {
+                    console.log("data확인 : " + data);
+                    console.log(data.game);
+                    $("#games").empty();
+                    for (i = 0; i < data.game.length; i++) {
+                        $("#games").append(`<div class="form-check">
+                            <input class="form-check-input" type="radio" name="game_list" class="game_list" id="flexRadioDefault${i}" value="${data.game[i]['game']}">
+                            <label class="form-check-label" for="flexRadioDefault${i}"> ${data.game[i]['game']}
+                            </label>
+                            </div>`);
+                    }
+                }
+            });
+            //end Ajax
+        }
+
+
+        $(document).on('click', "#send_data", function () {
+            games = $('input[name="game_list"]:checked').val();
+            if (toggle_state && games != null) {
+                //console.log(games);
+                $("#games").empty();
+                $("#games").append(`<div class="col-auto">
+                                        <input type="text" readonly class="form-control-plaintext" id="game_title" value="${games}">
+                                  </div>
+                                  <div class="col-auto">
+                                        <label for="inputPassword2" class="visually-hidden">Password</label>
+                                        <input type="number" class="form-control" id="play_time" placeholder="플레이 한 시간 ex) 8">
+                                  </div>`);
+                toggle_state = false;
+            } else {
+                games = $('#game_title').val();
+                if (games != null) {
+                    let play_time = $('#play_time').val();
+                    console.log(play_time);
+                    $.ajax({
+                        type: 'POST',
+                        data: {'game_name': games, 'play_time':play_time},
+                        dataType: 'json',
+                        url: {% url 'test2' %},
+                        error: function (err) {
+                            console.log("실행중 오류가 발생하였습니다.");
+                        },
+                        success: function (data) {
+                            console.log("data확인 : " + data['msg']);
+                        }
+                    });
+                    console.log(games);
+                    console.log('뭔가 있음')
+                } else {
+                    toggle_state = true;
+                    $("#games").empty();
+                    console.log(games);
+                    console.log(toggle_state);
+                    console.log('아무것도');
+                }
+
+            }
+
+        })
+
+    </script>
+
 </head>
 
 <body>
 <header class="container-fluid">
     <div class="row">
-        <div class="col-md-10" id="logo"> My Page</div>
-        <div class="col-md-1" id="go_home_button"><img
+        <div class="col-md-9" id="logo">{{ user.nickname }}님의 Page</div>
+        <div class="col-md-2" id="go_home_button"><img
                 src="https://store.cloudflare.steamstatic.com/public/shared/images/header/logo_steam.svg?t=962016"
-                width="176" height="44"></div>
+        ></div>
         <div class="col-md-1" id="logout_button">로그아웃</div>
     </div>
 </header>
@@ -27,24 +109,28 @@
 
 </nav>
 <section class="container">
-    <div class="row" id="header_article" >
+    <div class="row" id="header_article">
         <div class="col-md-8" id="left_article">
-            <div class="col-md-4" id="profile_img"><img
-                    src="https://illumesense.com/resources/illumesense/style/img/website/profile-picture-blanks/male-profile.jpg"
-                    alt=""></div>
+            <div class="col-md-4" id="profile_img">
+                {% if user.pro_img_url == '' %}
+                    <img src="https://illumesense.com/resources/illumesense/style/img/website/profile-picture-blanks/male-profile.jpg"
+                         alt="">
+                {% else %}
+                    {{ user.pro_img_url }}
+                {% endif %}
+            </div>
             <div class="col-md-8" id="profile">
                 <ul>
-                    <li>ID <span>User.ID</span></li>
-                    <li>닉네임 <span>User.Name</span></li>
-                    <li><i class="far fa-envelope fa-lg"></i> <span>User.Email</span></li>
-                    <li>가입일 : <span>User.JOINDATE</span></li>
+                    <li>ID : <span>{{ user.username }}</span></li>
+                    <li>닉네임 : <span>{{ user.nickname }}</span></li>
+                    <li><i class="far fa-envelope fa-lg"></i> <span>{{ user.email }}</span></li>
+                    <li>가입일 : <span>{{ user.date_joined }}</span></li>
                 </ul>
             </div>
         </div>
         <div class="col-md-4" id="right_article">
-            <div id="recommend_game"><img
-                    src="https://cdn.cloudflare.steamstatic.com/steam/apps/389730/header.jpg?t=1638999755"
-                    alt="">
+            <div id="recommend_game">
+                <img src="{{ img }}" alt="">
                 <p><h4>GameTitle</h4></p>
             </div>
             <div class="d-grid gap-2" id="interest">
@@ -67,14 +153,26 @@
                             <div class="modal-body">
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" placeholder="선호 게임 검색"
-                                           aria-label="" aria-describedby="button-addon2">
-                                    <button class="btn btn-outline-secondary" id="button-addon2">검색
+                                           aria-label="" aria-describedby="button-addon2" onkeyup="search(this)">
+                                    <button class="btn btn-outline-secondary" id="button-addon2" onclick="search()">검색
                                     </button>
+                                </div>
+                                <div id="games">
+                                    {#                                    <div class="form-check">#}
+                                    {#                                        <input class="form-check-input" type="radio" name="flexRadioDefault"#}
+                                    {#                                               id="flexRadioDefault1">#}
+                                    {#                                        <label class="form-check-label" for="flexRadioDefault1">#}
+                                    {#                                            Default radio#}
+                                    {#                                        </label>#}
+                                    {#                                    </div>#}
+                                    {#                                    <input id="play_time" type="number" placeholder="플레이 시간 ex: 82">ddd</input>#}
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Understood</button>
+                                <button type="button" class="btn btn-primary" id="send_data">
+                                    Understood
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -223,6 +321,14 @@
         </div>
     </div>
 </footer>
+<p>
+<ul>
+    {#    {% for x in game %}#}
+    <li style="background-color: red">{{ game.game }}</li>
+    {#    {% endfor %}#}
+</ul>
 
+
+</p>
 </body>
 </html>

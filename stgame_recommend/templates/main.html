@@ -31,8 +31,9 @@
   <div style="background-color: black;" class="offcanvas-body">
     <div>
         <img style="width: 150px; height: 80px; margin: auto; margin-top: 10px; margin-bottom: 30px" src="https://store.cloudflare.steamstatic.com/public/shared/images/header/logo_steam.svg?t=962016" class="logo">
-      <a class="nav-link" style="color: white; margin-bottom: 30px" href={% url 'my-page'%}> {{ user.nickname }} <span style="font-size: small">님 반갑습니다!</span></a>
-      <button style="width: 150px; background-color: gray; border-radius: 5px; margin: auto; display: flex; align-items: center; justify-content: center;" class="nav-link" href="/logout"><span style="font-size: 15px; color: white;">로그아웃</span></button>
+      <a class="nav-link" style="color: white; margin-bottom: 30px" href={% url 'my-page'%}> {{ user.nickname }} <span style="font-size: small">님 반갑습니다!<br>마이페이지</span></a>
+        <button style="width: 150px; height: 40px; background-color: gray; border-radius: 5px; margin: auto; display: flex; align-items: center; justify-content: center;" class="nav-link"><a href={% url 'logout' %}><span style="font-size: 15px; color: white;">로그아웃</span></a></button>
+
     </div>
   </div>
 </div>
@@ -40,22 +41,44 @@
   </div>
   <div id="container-wrap">
     <div class="container-header">
-      <img src="https://enewstoday.co.kr/news/photo/202002/1369655_431887_5647.jpg">
-      <img src="https://img.gta5-mods.com/q95/images/save-game-44/a82937-v_trunk_1920x1080.jpg">
-    </div>
-    <div class="container-body">
-      <div class="container-body-wrap">
-          <div class="other-users">
+        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
 
-          <p>사용자 이름 </p>
+            <div style="width: 250px;" class="carousel-item active">
+              <img src="https://enewstoday.co.kr/news/photo/202002/1369655_431887_5647.jpg" class="d-block w-100" alt="...">
+            </div>
+              {% for imgs in games %}
+            <div style="width: 250px;" class="carousel-item">
+                <img src="{{imgs.image}}" class="d-block w-100" alt="...">
+            </div>
+              {% endfor %}
+            <div class="carousel-item">
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
         </div>
-        <div class="recommend-games">
-              {% for rec in recommend %}
-          <p>{{ rec }}</p>
-            {% endfor %}
-        </div>
-      </div>
+{#      <img src="https://enewstoday.co.kr/news/photo/202002/1369655_431887_5647.jpg">#}
+{#      <img src="https://img.gta5-mods.com/q95/images/save-game-44/a82937-v_trunk_1920x1080.jpg">#}
     </div>
+<div class="container-body">
+    <div class="container-body-wrap">
+            <div class="other-users">
+                <p style="font-size: 50px; color: white"> {{ user.nickname }} </p>
+            </div>
+            <div class="recommend-games">
+                <div class="rec-list">
+                {% for i in rec %}
+                <div class="rec-box">{{ i }}</div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+</div>
     <div class="container-footer">
       <ul class='footer-ul'>
         <div class='tmt'>
@@ -63,11 +86,11 @@
           <div style="border: none" class="card mb-3 ">
             <div style="height: 80px" class="row g-0 dcbox">
               <div class="col-md-3 gameimg">
-                <img style="width: 180px; height: 60px" src={{game.image}} class="img-fluid rounded-start" alt="...">
+                <a href="{{ game.url }}"><img style="width: 180px; height: 60px" src={{game.image}} class="img-fluid rounded-start" alt="..."></a>
               </div>
               <div class="col-md-9">
                 <div style="display: flex" class="card-body">
-                    <div style="width: 70%; margin-top: 10px; "><h5 class="card-title"><b>{{game.title}}</b></h5></div>
+                    <div style="width: 70%; margin-top: 10px; "><h5 class="card-title"><b><a style="color: white; text-decoration: none" href="{{ game.url }}">{{game.title}}</a></b></h5></div>
                     <div style="width: 40%; margin-top: 10px; padding-left: 10px"><p class="card-text">할인율 : <b>{{game.discount_per}}</b></p></div>
                     <div style="width: 30%">
                         <p style="text-decoration: line-through; font-size: small;" class="card-text">{{game.original_price}}원</p>

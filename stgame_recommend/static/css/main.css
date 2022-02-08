@@ -22,6 +22,8 @@ img {
     border-radius: 10px;
     border: 0.2px solid grey;
 }
+.recommend-games{
+}
 .logo{
     background-color: rgba(0,0,0, .4);
     text-align: center;
@@ -37,6 +39,7 @@ img {
     width: 100%;
     max-width: 180px;
     text-align: center;
+    z-index: 1000;
 }
 .header li{
     list-style: none;
@@ -54,6 +57,7 @@ img {
 }
 
 #container-wrap {
+    border-radius: 5px;
     background-color: rgba(0,0,0, .4);
     width: 100%;
     max-width: 1320px;
@@ -70,16 +74,17 @@ img {
 }
 
 #container-wrap .container-body {
-    background-color: #b92d12;
-
+    background-color: transparent;
 }
 .container-body-wrap{
+    border: 1px solid gray;
     display: flex;
     justify-content: center;
     width: 100%;
     height: 400px;
     margin-top: 40px;
     text-align: center;
+    border-radius: 10px;
 }
 .nav-link{
     font-size: 25px;
@@ -89,18 +94,43 @@ img {
 }
 .other-users {
     background-color: #333333;
-    width: 200px;
+    width: 18%;
     height: 80px;
     margin: 10px;
     border-radius: 10px;
 }
+.rec-list p{
+    font-size: 10px;
+    color: white;
+
+}
 
 .recommend-games {
+    overflow: scroll;
     background-color: #333333;
-    width: 400px;
+    width: 100%;
     height: 80px;
     margin: 10px;
     border-radius: 10px;
+        /* IE scroll 숨김 */
+    -ms-overflow-style: none;
+}
+.rec-list{
+    display: flex;
+    margin: auto;
+}
+.rec-box{
+    margin: 5px;
+    font-size: 5px;
+    color: white;
+    background-color: #202d39;
+    width: 100%;
+    line-height: 27px;
+    vertical-align: middle;
+}
+.recommend-games::-webkit-scrollbar {
+    display: none;
+    width: 0 !important;
 }
 .container-footer{
     border: 1px solid gray;

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
 class UserModel(AbstractUser):
     class Meta:
         db_table = 'user'
@@ -27,16 +28,20 @@ class FavoriteGames(models.Model):
     user_id = models.IntegerField(null=True)
     playtime = models.IntegerField(null=True)
 
+
 class RecommendGames(models.Model):
     class Meta:
-        db_table = 'recommendsgames'
+        db_table = 'recommendgames'
 
-    rec_game = models.CharField(max_length=100, default='')
+    user_id = models.IntegerField(null=True)
+    rec_game = models.TextField(default='')
 
 
 class SimilarUser(models.Model):
     class Meta:
-        db_table = 'similar_users'
+        db_table = 'similarusers'
 
-    sim_user = models.CharField(max_length=50, default='')
+    user_id = models.IntegerField(null=True)
+    sim_user = models.TextField(default='')
     sim_game_list = models.TextField(default='')
+
