@@ -1,5 +1,3 @@
-import random
-
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.shortcuts import render, redirect, resolve_url
@@ -75,7 +73,8 @@ def sign_up(request):
 
             exist_user = UserModel.objects.filter(username=user_id) or UserModel.objects.filter(email=email)
             if exist_user:
-                return render(request, 'sign_in_and_up.html', {'error': '해당 아이디나 이메일이 사용 중입니다. 중복확인 먼저 해 주세요!'})
+                return render(request, 'sign_in_and_up.html',
+                              {'error': '해당 아이디나 이메일이 사용 중입니다. 중복확인 먼저 해 주세요!'})
             else:
                 UserModel.objects.create_user(username=user_id, password=password, nickname=nickname, email=email)
                 return render(request, 'sign_in_and_up.html')
