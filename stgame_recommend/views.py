@@ -220,9 +220,9 @@ class UserPasswordResetDoneView(PasswordResetDoneView):
 
 # 새 비밀번호 설정
 class UserPasswordResetConfirmView(PasswordResetConfirmView):
-    template_name = 'password_reset_confirm.html'
-    success_url = reverse_lazy('password_reset_complete')
     form_class = SetPasswordForm
+    success_url = reverse_lazy('password_reset_complete')
+    template_name = 'password_reset_confirm.html'
 
     def form_valid(self, form):
         return super().form_valid(form)
