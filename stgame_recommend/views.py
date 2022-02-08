@@ -23,6 +23,19 @@ from django.urls import reverse_lazy
 
 import random
 import numpy as np
+import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+import time
+from collections import Counter
+from sklearn.metrics import roc_curve, auc, average_precision_score
+from sklearn.metrics.pairwise import linear_kernel, cosine_similarity
+
+import os
+import django
+
+os.environ.setdefault('DJANGO_SETTING_MODULE', 'stgames.settings')
+django.setup()
 
 
 # 시작 페이지(로그인 및 회원가입)
@@ -89,6 +102,143 @@ def sign_up(request):
 @csrf_exempt
 @login_required
 def main(request):
+    # 스팀 할인게임 크롤링
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) '
+                      'Chrome/73.0.3683.86 Safari/537.36'}
+    data = requests.get('https://store.steampowered.com/specials/', headers=headers)
+
+    soup = BeautifulSoup(data.text, 'html.parser')
+    games = soup.select('#NewReleasesRows > a')
+
+    # 크롤링한 게임 리스트
+    game_list = []
+    i = 1
+    for game in games:
+        url = game['href']
+        image = game.select_one('div.tab_item_cap > img')['src']
+        title = game.select_one('div.tab_item_content > div.tab_item_name').text
+        discount_per = game.select_one('div.discount_block.tab_item_discount > div.discount_pct').text
+        original_price = game.select_one(
+            'div.discount_block.tab_item_discount > div.discount_prices > div.discount_original_price').text
+        discount_price = game.select_one(
+            'div.discount_block.tab_item_discount > div.discount_prices > div.discount_final_price').text
+
+        games_list = {
+            'index': i,
+            'url': url,
+            'image': image,
+            'title': title,
+            'discount_per': discount_per,
+            'original_price': original_price,
+            'discount_price': discount_price
+        }
+        game_list.append(games_list)
+        i += 1
+
+    # 유저 별 게임 추천 리스트
+
+    # 로그인한 유저의 id 확인
+    user_id = request.user.id
+    # 추천게임db에서 로그인한 사용자의 id를 확인하여 추천한 게임들을 가져온다.
+    try:
+        rec_games = RecommendGames.objects.get(user_id=user_id)
+        rec = rec_games.rec_game.replace("'", '').replace("[", '').replace("]", '').split(', ')  # 스트링자료를 리스트로 변환
+    except:
+        RecommendGames.objects.get(user_id=1)
+        rec = rec_games.rec_game.replace("'", '').replace("[", '').replace("]", '').split(', ')  # 스트링자료를 리스트로 변환
+    # 랜덤한 이미지 가져오기.
+    # a = Games.objects.filter(game__icontains='a')
+    # ImgPrice(a[random.randrange(1, 10)].game_url).img()
+
+    sim_user_game = SimilarUser.objects.all()
+    for sim in sim_user_game:
+        print(sim.sim_user)
+        print(sim.sim_game_list)
+
+    return render(request, 'main.html', {'games': game_list[:20], 'rec': rec[:10]})
+    # return render(request, 'main.html', {'games':game_list[:20], 'rec_games':rec_games})
+
+
+def take_url(request):
+    df = pd.read_csv('C:/Users/lutio/Desktop/13_stgames/stgames/steam_games.csv', encoding='utf-8')
+    urls = df['url']
+    game_list = []
+    for url in urls:
+        try:
+            u = url.split('/')[4]
+            game_list.append(FavoriteGames(game_id=u))
+        except:
+            print('None')
+
+    i = 0
+    j = 1
+    while True:
+        try:
+            FavoriteGames.objects.bulk_create(game_list[i:j])
+            i = j
+            j += 1
+            print(f'{i}개 완료', )
+            time.sleep(1)
+        except:
+            print("에러발생")
+            i += 1
+            j += 1
+    return render(request, 'main.html')
+
+
+def tensorflow(request):
+    new_user = np.random.rand(1, 5064)
+    apply_lambda = lambda x: 1 if x > 0.99 else 0
+    new_user = new_user.reshape(5064, )
+    tt = np.array([apply_lambda(xi) for xi in new_user])
+    tt = tt.reshape(1, 5064)
+    make_random_time = lambda x: random.randint(10, 90) if x == 1 else 0
+    tt_time = np.array([make_random_time(xi) for xi in tt.reshape(5064, )])
+    tt_time.reshape(5064, )
+
+    temp = CollaborateFiltering(k=30)
+    temp.add_new_user(tt_time)
+    temp.train_data()
+
+    recommend_result = temp.eval_result()
+    print("추천게임 : ", recommend_result)
+
+    similar_user = temp.recommend_sim_user()
+    print("비슷한유저 : ", similar_user)
+
+    user_id = request.user.id
+
+    try:
+        RecommendGames.objects.get(user_id=user_id)
+        RecommendGames.objects.filter(user_id=user_id).update(rec_game=recommend_result)
+        # a.update(rec_game=recommend_result)
+        print("업데이트 완료")
+    except:
+        RecommendGames.objects.create(rec_game=recommend_result, user_id=user_id)
+        print("작성완료")
+
+    sim_user = []
+    sim_user_game = []
+
+    for user in similar_user:
+        sim_user.append(user[0])
+        sim_user_game.append(user[1])
+
+    try:
+        SimilarUser.objects.get(user_id=user_id)
+        SimilarUser.objects.filter(user_id=user_id).update(sim_user=sim_user, sim_game_list=sim_user_game,
+                                                           user_id=user_id)
+        print("sim 업데이트 완료")
+    except:
+        SimilarUser.objects.create(sim_user=sim_user, sim_game_list=sim_user_game, user_id=user_id)
+        print("sim 작성완료")
+
+    # all_info = RecommendGames.objects.all()
+    # rec_info = all_info['rec_result']
+    # sim_user = all_info['sim_user']
+    # sim_game_list = all_info['sim_game_list']
+
     return render(request, 'main.html')
 
 

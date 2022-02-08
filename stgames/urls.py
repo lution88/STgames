@@ -1,14 +1,11 @@
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path
 from stgame_recommend import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     # 관리자 페이지 url
     path('admin/', admin.site.urls),
-
-    # 하위 앱 url파일 연결
-    # path('', include('stgame_recommend.urls')),
 
     # 시작 페이지 url
     path('', views.index, name='index'),
@@ -40,9 +37,18 @@ urlpatterns = [
     # 메인 페이지 url
     path('main/', views.main, name='main'),
 
+    #
+    path('testurl/', views.take_url, name='takeurl'),
+
+    #
+    path('tensorflow/', views.tensorflow, name='tensorflow'),
+
     # 마이 페이지 url
-    path('mypage/', views.mypage, name='test'),
+    path('mypage/', views.mypage, name='mypage'),
 
     #
     path('test2/', views.test2, name='test2'),
+
+    # 로그아웃
+    path('logout/', views.logout, name='logout'),
 ]
