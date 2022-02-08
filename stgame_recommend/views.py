@@ -11,13 +11,18 @@ from django.core.mail import EmailMessage
 import re
 
 from django.conf import settings
-from .models import UserModel
+from .models import UserModel, Games, RecommendGames, FavoriteGames, SimilarUser
+from .myclass import ImgPrice
+from .makeit_to_class import CollaborateFiltering
 from django.contrib import messages
 
 from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, \
-                                      PasswordResetConfirmView, PasswordResetCompleteView
+    PasswordResetConfirmView, PasswordResetCompleteView
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 from django.urls import reverse_lazy
+
+import random
+import numpy as np
 
 
 # 시작 페이지(로그인 및 회원가입)
@@ -85,13 +90,6 @@ def sign_up(request):
 @login_required
 def main(request):
     return render(request, 'main.html')
-
-
-# 마이 페이지(로그인 한 유저 정보)
-@csrf_exempt
-@login_required
-def my_page(request):
-    return render(request, 'my_page.html')
 
 
 # 로그아웃
@@ -238,5 +236,109 @@ class UserPasswordResetCompleteView(PasswordResetCompleteView):
         return context
 
 
-def test(request):
-    return render(request, 'my_page.html')
+# 마이 페이지(로그인 한 유저 정보)
+@csrf_exempt
+@login_required
+def mypage(request):
+    if request.method == 'GET':
+        a = Games.objects.filter(game__icontains='a')
+        recommend_game = RecommendGames.objects.get(user_id=request.user.id)
+        table = recommend_game.rec_game.maketrans({'[': '',
+                                                   ']': '',
+                                                   "'": '',
+                                                   })
+
+        recommend_game = recommend_game.rec_game.translate(table).split(',')
+        # for x in range(recommend_game):
+        #     Games.objects.filter(game= '')
+
+        print(recommend_game)
+        print(a[1].game_url)
+        print(ImgPrice(a[1].game_url).img())
+        games_count = Games.objects.all().count()
+        print(games_count)
+
+        return render(request, 'my_page.html',
+                      {'game': a[random.randrange(1, 100)], 'img': ImgPrice(a[random.randrange(1, 10)].game_url).img()})
+
+    if request.method == 'POST':
+        # word = request.body
+        # lstrip 왼쪽 공백제거 앞쪽 공백 제거
+        word = request.POST['search'].lstrip()
+        if word == "":
+            word = 9999999
+        print(word)
+
+        word = Games.objects.filter(game__icontains=word)
+
+        good = list(word.values('game')[:10])
+        print(good[:10])
+
+        return JsonResponse({'game': good})
+
+
+#     40832 40833
+@csrf_exempt
+def test2(request):
+    if request.method == 'POST':
+        game = request.POST['game_name']
+        play_time = request.POST['play_time']
+        print(game)
+        print(play_time)
+        print(request.user)
+        user_id = request.user.id
+        game_id = Games.objects.get(game=game).game_id
+        print('user_id : ', user_id)
+        print('game_id : ', game_id)
+
+        dup_count = FavoriteGames.objects.filter(game_id=game_id) & FavoriteGames.objects.filter(
+            user_id=user_id) & FavoriteGames.objects.filter(playtime=play_time)
+        dup_count = dup_count.count()
+        print(dup_count)
+
+        if dup_count <= 0:
+            FavoriteGames.objects.create(game_id=game_id, user_id=user_id, playtime=play_time)
+
+        # 모델 돌리는 중
+
+        play_time_list = np.zeros(5064)
+        print(play_time_list)
+
+        fagame = FavoriteGames.objects.filter(user_id=request.user.id)
+        beanList_1 = []
+        beanList_2 = []
+        for i in fagame:
+            print(i.game_id)
+            beanList_1.append(i.game_id)
+            beanList_2.append(i.playtime)
+
+        x = Games.objects.filter(game_id__in=beanList_1)
+        a = CollaborateFiltering(k=30)
+        beanList_1.clear()
+        for i in range(len(x)):
+            gamename = x.values('game')[i]['game']
+            print(gamename)
+            c = a.game2idx_origin[gamename]
+            beanList_1.append(gamename)
+            print(c)
+            play_time_list[c] = beanList_2[i]
+            print(beanList_2[i])
+
+        print(play_time_list)
+
+        a.add_new_user(play_time_list)
+        a.train_data()
+        print('user_game_name: ', beanList_1)
+        print('test:', a.eval_result())
+        print(a.recommend_sim_user())
+        try:
+            recommend_game = RecommendGames.objects.get(user_id=request.user.id)
+            recommend_game.rec_game = a.eval_result()
+            recommend_game.save()
+        except:
+            RecommendGames.objects.create(user_id=request.user.id, rec_game=a.eval_result())
+
+        return JsonResponse({'msg': '무야호'})
+
+    else:
+        return render(request, 'my_page.html')

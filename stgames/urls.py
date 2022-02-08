@@ -8,7 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # 하위 앱 url파일 연결
-    path('', include('stgame_recommend.urls')),
+    # path('', include('stgame_recommend.urls')),
 
     # 시작 페이지 url
     path('', views.index, name='index'),
@@ -41,5 +41,8 @@ urlpatterns = [
     path('main/', views.main, name='main'),
 
     # 마이 페이지 url
-    path('my-page/', views.my_page, name='my-page'),
+    path('mypage/', views.mypage, name='test'),
+
+    #
+    path('test2/', views.test2, name='test2'),
 ]
