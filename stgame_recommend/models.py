@@ -16,17 +16,17 @@ class Games(models.Model):
 
     game = models.CharField(max_length=256, default='')
     tag = models.CharField(max_length=256, default='')
-    game_id = models.CharField(max_length=256, default='')
-    game_url = models.CharField(max_length=256, default='')
+    game_id = models.IntegerField(null=True)
+    game_url = models.CharField(max_length=550, default='')
 
 
 class FavoriteGames(models.Model):
     class Meta:
         db_table = 'favoritegames'
 
-    game_id = models.CharField(max_length=256, default='')
-    user_id = models.CharField(max_length=256, default='')
-    playtime = models.DateTimeField(blank=True, null=True)
+    game_id = models.IntegerField()
+    user_id = models.IntegerField()
+    playtime = models.IntegerField()
 
 
 class RecommendGames(models.Model):
@@ -41,5 +41,6 @@ class SimilarUser(models.Model):
     class Meta:
         db_table = 'similarusers'
 
-    sim_user = models.CharField(max_length=50, default='')
+    user_id = models.IntegerField(null=True)
+    sim_user = models.TextField(default='')
     sim_game_list = models.TextField(default='')
