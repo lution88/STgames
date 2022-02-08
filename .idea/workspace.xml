@@ -5,21 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e7811d3-74fd-458d-a283-25c4127a7cbc" name="Changes" comment="Changes">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/de0ddeaf-c0ce-4581-bbf0-a71c13515338.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/de0ddeaf-c0ce-4581-bbf0-a71c13515338.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgame_recommend/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgame_recommend/migrations/0002_games.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgame_recommend/migrations/0003_favoritegames_remove_games_playtime_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgame_recommend/migrations/0003_favoritegames_rename_user_id_games_game_id_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgame_recommend/migrations/0004_alter_favoritegames_game_id_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgame_recommend/migrations/0005_recommendgames_similaruser.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgame_recommend/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/stgame_recommend/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgame_recommend/myclass.py" beforeDir="false" afterPath="$PROJECT_DIR$/stgame_recommend/myclass.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgame_recommend/static/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/stgame_recommend/static/css/main.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stgame_recommend/templates/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/stgame_recommend/templates/main.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgame_recommend/templates/my_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/stgame_recommend/templates/my_page.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgame_recommend/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/stgame_recommend/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stgame_recommend/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/stgame_recommend/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -227,7 +214,7 @@
       <workItem from="1644242356036" duration="290000" />
       <workItem from="1644242663174" duration="3471000" />
       <workItem from="1644277996255" duration="27734000" />
-      <workItem from="1644316913999" duration="12670000" />
+      <workItem from="1644316913999" duration="14045000" />
     </task>
     <servers />
   </component>
