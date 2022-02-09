@@ -53,6 +53,11 @@ def sign_in(request):
         me = auth.authenticate(request, username=user_id, password=password)
         if me is not None:
             auth.login(request, me)
+            try:
+                a = UserModel.objects.get(username=user_id)
+                RecommendGames.objects.get(user_id=a.id)
+            except:
+                return redirect('/survey/')
             return redirect('/main')
         else:
             messages.error(request, '아이디나 비밀번호를 확인해 주세요!')
@@ -151,13 +156,14 @@ def main(request):
     # a = Games.objects.filter(game__icontains='a')
     # ImgPrice(a[random.randrange(1, 10)].game_url).img()
 
-    sim_user_game = SimilarUser.objects.all()
+    sim_user_game = SimilarUser.objects.filter(user_id=user_id)
     for sim in sim_user_game:
-        print(sim.sim_user)
-        print(sim.sim_game_list)
+        print("user : ", sim.sim_user)
+        sim_user = sim.sim_user
+        print("games : ", sim.sim_game_list)
+        sim_game = sim.sim_game_list
 
-    return render(request, 'main.html', {'games': game_list[:20], 'rec': rec[:10]})
-    # return render(request, 'main.html', {'games':game_list[:20], 'rec_games':rec_games})
+    return render(request, 'main.html', {'games': game_list[:20], 'rec': rec[:5], 'sim': sim})
 
 
 def take_url(request):
@@ -381,7 +387,7 @@ class UserPasswordResetCompleteView(PasswordResetCompleteView):
 # 마이 페이지(로그인 한 유저 정보)
 @csrf_exempt
 @login_required
-def mypage(request):
+def my_page(request):
     if request.method == 'GET':
         a = Games.objects.filter(game__icontains='a')
         recommend_game = RecommendGames.objects.get(user_id=request.user.id)
@@ -391,17 +397,41 @@ def mypage(request):
                                                    })
 
         recommend_game = recommend_game.rec_game.translate(table).split(',')
-        # for x in range(recommend_game):
-        #     Games.objects.filter(game= '')
+        url_list = []
+        price_list = []
+        fa_game_list = Games.objects.none()
+        games = Games.objects.none()
+        print(games)
+        # <QuerySet []>
+        # print(Games.objects.filter(game__iexact='Dota 2').query)
 
-        print(recommend_game)
-        print(a[1].game_url)
-        print(ImgPrice(a[1].game_url).img())
-        games_count = Games.objects.all().count()
-        print(games_count)
+        for x in recommend_game:
+            games |= Games.objects.filter(game__iexact=x.lstrip())
+            # print(x.lstrip())
 
+        # print(games)
+        # print(a[1].game_url)
+        # print(ImgPrice(a[1].game_url).img())
+        # games_count = Games.objects.all().count()
+        # print(games_count)
+
+        favorite_game = FavoriteGames.objects.filter(user_id=request.user.id).values('game_id')
+        for x in range(5):
+            imgprice = ImgPrice(games[x].game_url)
+            url_list.append(imgprice.img())
+            price_list.append(imgprice.price())
+
+        for x in favorite_game:
+            fa_game_list |= Games.objects.filter(game_id=x['game_id'])
+        print(fa_game_list)
+
+
+        # print(price_list)
+        games_list = zip(games[:5], url_list, price_list)
+        # print(url_list)
         return render(request, 'my_page.html',
-                      {'game': a[random.randrange(1, 100)], 'img': ImgPrice(a[random.randrange(1, 10)].game_url).img()})
+                      {'games': games_list, 'img': ImgPrice(a[random.randrange(1, 10)].game_url).img(),
+                       'fa_games': fa_game_list[:3]})
 
     if request.method == 'POST':
         # word = request.body
@@ -411,7 +441,7 @@ def mypage(request):
             word = 9999999
         print(word)
 
-        word = Games.objects.filter(game__icontains=word)
+        word = Games.objects.filter(game__istartswith=word)
 
         good = list(word.values('game')[:10])
         print(good[:10])
@@ -419,9 +449,19 @@ def mypage(request):
         return JsonResponse({'game': good})
 
 
+def dict_key_upper(data):
+    if isinstance(data, dict):
+        return {k.upper(): dict_key_upper(v) for k, v in data.items()}
+    elif isinstance(data, list):
+        return [dict_key_upper(v) for v in data]
+    else:
+        return data
+
+
 #     40832 40833
+@login_required
 @csrf_exempt
-def test2(request):
+def add_reco_fa(request):
     if request.method == 'POST':
         game = request.POST['game_name']
         play_time = request.POST['play_time']
@@ -460,7 +500,7 @@ def test2(request):
         for i in range(len(x)):
             gamename = x.values('game')[i]['game']
             print(gamename)
-            c = a.game2idx_origin[gamename]
+            c = dict_key_upper(a.game2idx_origin)[gamename.upper()]
             beanList_1.append(gamename)
             print(c)
             play_time_list[c] = beanList_2[i]
@@ -473,14 +513,31 @@ def test2(request):
         print('user_game_name: ', beanList_1)
         print('test:', a.eval_result())
         print(a.recommend_sim_user())
+
+        sim_user = []
+        sim_user_game = []
+
+        for user in a.recommend_sim_user():
+            sim_user.append(user[0])
+            sim_user_game.append(user[1])
+
         try:
             recommend_game = RecommendGames.objects.get(user_id=request.user.id)
             recommend_game.rec_game = a.eval_result()
             recommend_game.save()
+            print(1111111)
+            # SimilarUser.objects.filter(sim_user=request.user.id).update(
+            #     sim_game_list=a.recommend_sim_user())
+            SimilarUser.objects.filter(user_id=request.user.id).update(sim_user=sim_user, sim_game_list=sim_user_game)
+            print(2222222)
         except:
+            SimilarUser.objects.create(sim_user=sim_user, sim_game_list=sim_user_game, user_id=request.user.id)
             RecommendGames.objects.create(user_id=request.user.id, rec_game=a.eval_result())
 
         return JsonResponse({'msg': '무야호'})
 
-    else:
-        return render(request, 'my_page.html')
+
+# 설문조사 페이지
+@login_required()
+def survey(request):
+    return render(request, 'survey.html')
