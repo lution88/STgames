@@ -44,10 +44,10 @@ urlpatterns = [
     path('tensorflow/', views.tensorflow, name='tensorflow'),
 
     # 마이 페이지 url
-    path('mypage/', views.mypage, name='mypage'),
+    path('my-page/', views.my_page, name='my-page'),
 
-    #
-    path('test2/', views.test2, name='test2'),
+    # 추천 ML 작동 api
+    path('addrecommend/', views.add_reco_fa, name='addrecommend'),
 
     # 로그아웃
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
