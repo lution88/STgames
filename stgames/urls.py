@@ -50,5 +50,5 @@ urlpatterns = [
     path('test2/', views.test2, name='test2'),
 
     # 로그아웃
-    path('logout/', views.logout, name='logout'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
