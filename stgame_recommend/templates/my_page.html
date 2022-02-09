@@ -34,6 +34,7 @@
     	*/
 
 
+
         /* [html 최초 로드 및 이벤트 상시 대기 실시] */
         window.onload = function () {
             console.log("");
@@ -76,23 +77,6 @@
 
             // [스핀 옵션 지정 실시]
             var opts = {
-                {#lines: 20, // 그릴 선의 수 [20=원형 / 10=막대] [The number of lines to draw]#}
-                {#length: 80, // 각 줄의 길이 [0=원형 / 10=막대] [The length of each line]#}
-                {#width: 14, // 선 두께 [The line thickness]#}
-                {#radius: 84, // 내부 원의 반지름 [The radius of the inner circle]#}
-                {#scale: 1, // 스피너의 전체 크기 지정 [Scales overall size of the spinner]#}
-                {#corners: 1, // 모서리 라운드 [Corner roundness (0..1)]#}
-                {#animation: 'spinner-line-fade-more',#}
-                {#color: '#d50000', // 로딩 CSS 색상 [CSS color or array of colors]#}
-                {#fadeColor: 'transparent', // 로딩 CSS 색상 [CSS color or array of colors]#}
-                {#opacity: 0.05, // 선 불투명도 [Opacity of the lines]#}
-                {#rotate: 0, // 회전 오프셋 각도 [The rotation offset]#}
-                {#direction: 1, // 회전 방향 시계 방향, 반시계 방향 [1: clockwise, -1: counterclockwise]#}
-                {#speed: 1, // 회전 속도 [Rounds per second]#}
-                {#trail: 74, // 꼬리 잔광 비율 [Afterglow percentage]#}
-                {#fps: 20, // 초당 프레임 수 [Frames per second when using setTimeout() as a fallback in IE 9]#}
-                {#zIndex: 2e9, // 인덱스 설정 [The z-index (defaults to 2000000000)]#}
-                {#position: 'absolute'#}
                 lines: 20, // The number of lines to draw
                 length: 80, // The length of each line
                 width: 14, // The line thickness
@@ -145,7 +129,7 @@
                 type: 'POST',
                 data: {'search': word},
                 dataType: 'json',
-                url: {% url 'mypage' %},
+                url: {% url 'my-page' %},
                 error: function (err) {
                     console.log("실행중 오류가 발생하였습니다.");
                 },
@@ -188,15 +172,15 @@
                         type: 'POST',
                         data: {'game_name': games, 'play_time': play_time},
                         dataType: 'json',
-                        url: {% url 'test2' %},
+                        url: {% url 'addrecommend' %},
                         beforeSend: function () {
                             spinnerStart();
                         },
                         error: function (err) {
                             console.log("실행중 오류가 발생하였습니다.");
+                            spinnerStop()
                         },
                         success: function (data) {
-                            spinnerStop()
                             console.log("data확인 : " + data['msg']);
                             location.reload();
                         }
@@ -226,11 +210,12 @@
 <body>
 <header class="container-fluid">
     <div class="row">
-        <div class="col-md-9" id="logo">{{ user.nickname }}님의 Page</div>
+        <div class="col-md-9" id="logo" style="padding-left: 25%;">My Page<small
+                style="font-size: medium">({{ user.username }})</small></div>
         <div class="col-md-2" id="go_home_button" onclick="go_home()">
             <img src="https://store.cloudflare.steamstatic.com/public/shared/images/header/logo_steam.svg?t=962016">
         </div>
-        <div class="col-md-1" id="logout_button">로그아웃</div>
+        <div class="col-md-1" id="logout_button" onclick="location.href='/logout/'">로그아웃</div>
     </div>
 </header>
 <nav>
@@ -260,6 +245,11 @@
             <div id="recommend_game">
                 <img src="{{ img }}" alt="">
                 <p><h4>GameTitle</h4></p>
+                <ul>
+                    {% for fg in fa_games %}
+                        <li>{{ fg.game }}</li>
+                    {% endfor %}
+                </ul>
             </div>
             <div class="d-grid gap-2" id="interest">
 
@@ -313,114 +303,35 @@
     <div id="article">
         <div id="game_list">
             <ul>
-                <li>
-                    <div class="card mb-3 " style="max-width: 100%;">
-                        <div class="row g-0">
-                            <div class="col-md-2 game-img">
-                                <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header_koreana.jpg?t=1621944801"
-                                     class="img-fluid rounded-start" alt="...">
-                            </div>
-                            <div class="col-md-10">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">This is a wider card with supporting text below as a natural
-                                        lead-in to additional content. This content is a little bit longer.</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+
+                {% for game,game_img,game_price in games %}
+                    <li>
+                        <div class="card mb-3 " style="max-width: 100%;">
+                            <div class="row g-0">
+                                <div class="col-md-2 game-img">
+                                    <img src="{{ game_img }}"
+                                         class="img-fluid rounded-start" alt="...">
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="col-md-10">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ game.game }}</h5>
+                                            {% if game_price == 'To' or game_price == 'to' %}
+                                                <p class="card-text">가격 : 무료</p>
+                                            {% else %}
+                                                <p class="card-text">가격 : {{ game_price }}원</p>
+                                            {% endif %}
+                                            <p class="card-text"><small class="text-muted">Last updated 3 mins
+                                                ago</small>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="card mb-3 " style="max-width: 100%;">
-                        <div class="row g-0">
-                            <div class="col-md-2 game-img">
-                                <img src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/578080/f1e2c790bc051b833b7998896bf879b2a543fbe9.jpg"
-                                     class="img-fluid rounded-start" alt="...">
-                            </div>
-                            <div class="col-md-10">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">This is a wider card with supporting text below as a natural
-                                        lead-in to additional content. This content is a little bit longer.</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="card mb-3 " style="max-width: 100%;">
-                        <div class="row g-0">
-                            <div class="col-md-2 game-img">
-                                <img src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/108600/391ddf7e88fb4517d3d11bb11373af3a8cc3bd3b.jpg"
-                                     class="img-fluid rounded-start" alt="...">
-                            </div>
-                            <div class="col-md-10">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">This is a wider card with supporting text below as a natural
-                                        lead-in to additional content. This content is a little bit longer.</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="card mb-3 " style="max-width: 100%;">
-                        <div class="row g-0">
-                            <div class="col-md-2 game-img">
-                                <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1435790/capsule_sm_120.jpg?t=1642344571"
-                                     class="img-fluid rounded-start" alt="...">
-                            </div>
-                            <div class="col-md-10">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">This is a wider card with supporting text below as a natural
-                                        lead-in to additional content. This content is a little bit longer.</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="card mb-3 " style="max-width: 100%;">
-                        <div class="row g-0">
-                            <div class="col-md-2 game-img">
-                                <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/header.jpg?t=1618851907"
-                                     class="img-fluid rounded-start" alt="...">
-                            </div>
-                            <div class="col-md-10">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">This is a wider card with supporting text below as a natural
-                                        lead-in to additional content. This content is a little bit longer.</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="card mb-3 " style="max-width: 100%;">
-                        <div class="row g-0">
-                            <div class="col-md-2 game-img">
-                                <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1551360/header.jpg?t=1643831870"
-                                     class="img-fluid rounded-start" alt="...">
-                            </div>
-                            <div class="col-md-10">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">This is a wider card with supporting text below as a natural
-                                        lead-in to additional content. This content is a little bit longer.</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
+                    </li>
+                {% endfor %}
+
             </ul>
         </div>
     </div>
@@ -449,13 +360,6 @@
         </div>
     </div>
 </footer>
-<p>
-<ul>
-    {#    {% for x in game %}#}
-    <li style="background-color: red">{{ game.game }}</li>
-    {#    {% endfor %}#}
-</ul>
 
-
-</p>
 </body>
+</html>
