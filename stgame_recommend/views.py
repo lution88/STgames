@@ -247,7 +247,7 @@ def tensorflow(request):
 @login_required  # 사용자가 로그인 꼭 되어있어야 접근 가능함 표시
 def logout(request):
     auth.logout(request)
-    return redirect('')
+    return redirect('/')
 
 
 # 아이디 중복 확인 및 유효성 검사
