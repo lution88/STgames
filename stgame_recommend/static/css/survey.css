@@ -1,0 +1,32 @@
+@charset "UTF-8";
+body {
+    height: 100vh;
+    background-image: url("https://img2.quasarzone.co.kr/img/data/editor/1609/06fe0f598b64f2d43cf6b8a7699f1c33_1472720401_6539.png");
+    background-size: cover;
+}
+
+body:before {
+    content: "";
+    opacity: 0.5;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: #000;
+}
+
+
+#container {
+    border-radius: 5px;
+    min-height: 800px;
+    min-widthwidth: 1024px;
+    background-color: ghostwhite;
+    position: absolute;
+    left: 25%;
+    top: 10%;
+}
+
+#footer {
+    text-align: center;
+}
