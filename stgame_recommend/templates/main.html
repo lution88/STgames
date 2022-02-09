@@ -45,7 +45,7 @@
                      src="https://store.cloudflare.steamstatic.com/public/shared/images/header/logo_steam.svg?t=962016"
                      class="logo">
                 <a class="nav-link" style="color: white; margin-bottom: 30px"
-                   href={% url 'mypage' %}> {{ user.nickname }} <span style="font-size: small">님 반갑습니다!<br>마이페이지</span></a>
+                   href={% url 'my-page' %}> {{ user.nickname }} <span style="font-size: small">님 반갑습니다!<br>마이페이지</span></a>
                 <button style="width: 150px; height: 40px; background-color: gray; border-radius: 5px; margin: auto; display: flex; align-items: center; justify-content: center;"
                         class="nav-link"><a href={% url 'logout' %}><span
                         style="font-size: 15px; color: white;">로그아웃</span></a></button>
@@ -88,13 +88,23 @@
     <div class="container-body">
         <div class="container-body-wrap">
             <div class="other-users">
-                <p style="font-size: 50px; color: white"> {{ user.nickname }} </p>
+                <p style="font-size: 50px; color: white; margin: 0;"> {{ user.nickname }} </p>
             </div>
             <div class="recommend-games">
                 <div class="rec-list">
                     {% for i in rec %}
                         <div class="rec-box">{{ i }}</div>
                     {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div style='height: 200px' class="container-body-wrap">
+            <div style='height: 180px' class="other-users">
+                <p style="font-size: 10px; color: white"> 나와 비슷한 유저들: {{ sim.sim_user }} </p>
+            </div>
+            <div style='height: 180px' class="recommend-games">
+                <div class="rec-list">
+                    <div class="rec-box">유저기반추천 : {{ sim.sim_game_list }}</div>
                 </div>
             </div>
         </div>
