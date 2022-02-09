@@ -49,6 +49,9 @@ urlpatterns = [
     # 추천 ML 작동 api
     path('addrecommend/', views.add_reco_fa, name='addrecommend'),
 
+    # 설문조사 페이지
+    path('survey/', views.survey, name='survey'),
+
     # 로그아웃
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
