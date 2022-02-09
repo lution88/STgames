@@ -17,12 +17,9 @@ class ImgPrice:
         return result
 
     def price(self):
-        result = self.soup.select_one('.price').getText().split()[1]
+        result = self.soup.select_one('.price').getText().lstrip().rstrip()
         return result
 
     def title(self):
         result = self.soup.select_one('#appHubAppName').getText()
         return result
-
-# 클래스
-
