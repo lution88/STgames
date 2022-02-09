@@ -143,14 +143,36 @@ def main(request):
     # a = Games.objects.filter(game__icontains='a')
     # ImgPrice(a[random.randrange(1, 10)].game_url).img()
 
-    sim_user_game = SimilarUser.objects.all()
+    sim_user_game = SimilarUser.objects.filter(user_id=user_id)
+    z=list(sim_user_game.values('sim_game_list'))
+    # print(type(z))
+    # print(z)
+    for x in z:
+        # print(x)
+        y = x['sim_game_list']
+        # print(type(y))
+        # print('y: ', y)
+        o = y.split(', ')
+
+
     for sim in sim_user_game:
-        print(sim.sim_user)
-        print(sim.sim_game_list)
+        # print("user : ", sim.sim_user)
+        sim_user = sim.sim_user
+        # print("games : ", sim.sim_game_list)
+        sim_game = sim.sim_game_list
+        de = sim_user.split(', ')
+        te = sim_game.split('],')
+    dede = []
+    for d in range(len(de)):
+        dede.append(de[d].replace('[', '').replace(']', ''))
+    print(dede)
+    tete = []
+    for t in range(len(te)):
+        tete.append(str("["+te[t].replace('[', '').replace(']', '') + " ]"))
+    # print(tete)
+    game_zip = zip(tete, dede)
 
-
-
-    return render(request, 'main.html', {'games':game_list[:20], 'rec':rec[:10]})
+    return render(request, 'main.html', {'games':game_list[:20], 'rec':rec[:5], 'sim_user_game':sim_user_game, 'game_zip':game_zip})
     # return render(request, 'main.html', {'games':game_list[:20], 'rec_games':rec_games})
 
 
@@ -286,7 +308,6 @@ def take_url(request):
 
 
 def tensorflow(request):
-
     new_user = np.random.rand(1, 5064)
     apply_lambda = lambda x: 1 if x > 0.99 else 0
     new_user = new_user.reshape(5064, )

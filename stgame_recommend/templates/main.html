@@ -78,62 +78,102 @@
                 {#      <img src="https://enewstoday.co.kr/news/photo/202002/1369655_431887_5647.jpg">#}
                 {#      <img src="https://img.gta5-mods.com/q95/images/save-game-44/a82937-v_trunk_1920x1080.jpg">#}
             </div>
-            <div class="container-body">
-                <div class="container-body-wrap">
-                    <div class="other-users">
-                        <p style="font-size: 50px; color: white"> {{ user.nickname }} </p>
-                    </div>
-                    <div class="recommend-games">
-                        <div class="rec-list">
-                            {% for i in rec %}
-                                <div class="rec-box">{{ i }}</div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            <p>나와 비슷한 유저 추천</p>
-                        </div>
-                        <div>
+        </div>
+        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
 
-                        </div>
-                    </div>
+                <div style="width: 250px;" class="carousel-item active">
+                    <img src="https://enewstoday.co.kr/news/photo/202002/1369655_431887_5647.jpg" class="d-block w-100"
+                         alt="...">
                 </div>
-            </div>
-            <div class="container-footer">
-                <ul class='footer-ul'>
-                    <div class='tmt'>
-                        {% for game in games %}
-                            <div style="border: none" class="card mb-3 ">
-                                <div style="height: 80px" class="row g-0 dcbox">
-                                    <div class="col-md-3 gameimg">
-                                        <a href="{{ game.url }}"><img style="width: 180px; height: 60px"
-                                                                      src={{ game.image }} class="img-fluid
-                                                                      rounded-start" alt="..."></a>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <div style="display: flex" class="card-body">
-                                            <div style="width: 70%; margin-top: 10px; "><h5 class="card-title"><b><a
-                                                    style="color: white; text-decoration: none"
-                                                    href="{{ game.url }}">{{ game.title }}</a></b></h5></div>
-                                            <div style="width: 40%; margin-top: 10px; padding-left: 10px"><p
-                                                    class="card-text">할인율 : <b>{{ game.discount_per }}</b></p></div>
-                                            <div style="width: 30%">
-                                                <p style="text-decoration: line-through; font-size: small;"
-                                                   class="card-text">{{ game.original_price }}원</p>
-                                                <p style="" class="card-text">{{ game.discount_price }}원</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
+                {% for imgs in games %}
+                    <div style="width: 250px;" class="carousel-item">
+                        <img src="{{ imgs.image }}" class="d-block w-100" alt="...">
                     </div>
-
-                </ul>
+                {% endfor %}
+                <div class="carousel-item">
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+                            data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                            data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+                {#      <img src="https://enewstoday.co.kr/news/photo/202002/1369655_431887_5647.jpg">#}
+                {#      <img src="https://img.gta5-mods.com/q95/images/save-game-44/a82937-v_trunk_1920x1080.jpg">#}
             </div>
         </div>
     </div>
+    <div class="container-body">
+        <div class="container-body-wrap">
+            <div class="other-users"><p style="font-size: 50px; color: white"> {{ user.nickname }} </p></div>
+            <div class="recommend-games">
+                <div class="rec-list">
+                    {% for i in rec %}
+                        <div class="rec-box">{{ i }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div style='height: 300px' class="container-body-wrap">
+            {% for sim in sim_user_game %}
+                <div style='height: 280px' class="other-users"><p style="font-size: 10px; color: white"><span
+                        style="font-size: x-large;">나와 비슷한 유저들<br></span> {{ sim.sim_user }} </p></div>
+                <div style='height: 280px' class="recommend-games">
+
+                {% for te, de in game_zip %}
+                    <div class="rec-list">
+
+                        <div class="rec-box2"><br>
+                            <span style="font-size: x-large;">User_ID : {{ de }}</span>
+                            <p style="font-size: 5px;">{{ te }}</p></div>
+                        <br>
+
+                    </div>
+
+                {% endfor %}
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+    <div class="container-footer">
+        <ul class='footer-ul'>
+            <div class='tmt'>
+                {% for game in games %}
+                    <div style="border: none" class="card mb-3 ">
+                        <div style="height: 80px" class="row g-0 dcbox">
+                            <div class="col-md-3 gameimg">
+                                <a href="{{ game.url }}" target="_blank"><img style="width: 180px; height: 60px"
+                                                              src={{ game.image }} class="img-fluid
+                                                              rounded-start" alt="..."></a>
+                            </div>
+                            <div class="col-md-9">
+                                <div style="display: flex" class="card-body">
+                                    <div style="width: 70%; margin-top: 10px; "><h5 class="card-title"><b><a
+                                            style="color: white; text-decoration: none"
+                                            href="{{ game.url }}" target="_blank">{{ game.title }}</a></b></h5></div>
+                                    <div style="width: 40%; margin-top: 10px; padding-left: 10px"><p
+                                            class="card-text">할인율 : <b>{{ game.discount_per }}</b></p></div>
+                                    <div style="width: 30%">
+                                        <p style="text-decoration: line-through; font-size: small;"
+                                           class="card-text">{{ game.original_price }}원</p>
+                                        <p style="" class="card-text">{{ game.discount_price }}원</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </ul>
+    </div>
+</div>
+</div>
 </div>
 
 </body>

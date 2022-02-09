@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="0e7811d3-74fd-458d-a283-25c4127a7cbc" name="Changes" comment="Changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stgame_recommend/static/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/stgame_recommend/static/css/main.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stgame_recommend/templates/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/stgame_recommend/templates/main.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stgame_recommend/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/stgame_recommend/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -215,6 +217,7 @@
       <workItem from="1644242663174" duration="3471000" />
       <workItem from="1644277996255" duration="27734000" />
       <workItem from="1644316913999" duration="14045000" />
+      <workItem from="1644367237204" duration="18699000" />
     </task>
     <servers />
   </component>
